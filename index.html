@@ -116,40 +116,50 @@
 </form>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxQKcal_TMX3wL1QVTwo8CihM3LeCIhWVkRctK7NTeEkGW2BXG4wUXiiaeM4bSYr0r2JQ/exec";
+const URL = "https://script.google.com/macros/s/AKfycbymcK8C1F4sC41YD8QOb_7SZb-E50TZtMHXZ_4rVZ69NNFP6DzX132XxvHDSWz_GuJZBA/exec";
 
-document.getElementById("formEvento").addEventListener("submit", function (e) {
+document.getElementById("form").addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const formData = new FormData(this);
-  const dados = {};
+  const formData = new FormData();
 
-  formData.forEach((valor, chave) => {
-    dados[chave] = valor === "" ? 0 : valor;
-  });
+  formData.append("protocolo", document.getElementById("protocolo").value);
+  formData.append("evento", document.getElementById("evento").value);
+  formData.append("local", document.getElementById("local").value);
 
-  fetch(SCRIPT_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(dados)
-  })
-  .then(res => res.text())
-  .then(() => {
+  formData.append("cones", document.getElementById("cones").value);
+  formData.append("cavaletes", document.getElementById("cavaletes").value);
+
+  formData.append("veiculo1", document.getElementById("veiculo1").value);
+  formData.append("horas1", document.getElementById("horas1").value);
+
+  formData.append("veiculo2", document.getElementById("veiculo2").value);
+  formData.append("horas2", document.getElementById("horas2").value);
+
+  try {
+    const res = await fetch(URL, {
+      method: "POST",
+      body: formData
+    });
+
+    const txt = await res.text();
     alert("Enviado com sucesso!");
-    this.reset();
-  })
-  .catch(err => {
+    console.log(txt);
+
+    e.target.reset();
+
+  } catch (err) {
     console.error(err);
     alert("Erro ao enviar");
-  });
+  }
 });
 </script>
 
 
+
 </body>
 </html>
+
 
 
 
