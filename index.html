@@ -2,168 +2,170 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <title>Solicitação de Interdição</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro de Evento</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f6f8;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      background: #f4f6f8;
       margin: 0;
-    }
-    form {
-      background-color: white;
       padding: 20px;
-      border-radius: 10px;
-      width: 320px;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     }
-    h2 {
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #ffffff;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
       text-align: center;
+      margin-bottom: 25px;
     }
-    input, button {
+
+    label {
+      font-weight: bold;
+      margin-top: 15px;
+      display: block;
+    }
+
+    input {
       width: 100%;
       padding: 10px;
-      margin-top: 10px;
-      margin-bottom: 10px;
+      margin-top: 5px;
       border-radius: 5px;
       border: 1px solid #ccc;
+      font-size: 14px;
     }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
     button {
-      background-color: #007bff;
-      color: white;
+      margin-top: 25px;
+      width: 100%;
+      padding: 14px;
+      background: #1976d2;
+      color: #fff;
+      border: none;
+      font-size: 16px;
+      border-radius: 6px;
       cursor: pointer;
     }
+
     button:hover {
-      background-color: #0056b3;
-    }
-    .msg {
-      text-align: center;
-      margin-top: 10px;
-      font-size: 14px;
-      color: green;
+      background: #135ba1;
     }
   </style>
 </head>
 <body>
 
-<form id="form">
-  <h2>Cadastro de Evento</h2>
+<div class="container">
+  <h1>Solicitação de Interdição</h1>
 
-  <label for="protocolo">Protocolo</label>
-  <input type="text" id="protocolo" name="protocolo" placeholder="Protocolo" required>
+  <form id="form">
 
-  <label for="evento">Nome do Evento</label>
-  <input type="text" id="evento" name="evento" placeholder="Nome do Evento" required>
+    <label>Protocolo</label>
+    <input type="text" name="protocolo" required>
 
-  <label for="local">Local do Evento</label>
-  <input type="text" id="local" name="local" placeholder="Local do Evento" required>
+    <label>Evento</label>
+    <input type="text" name="evento">
 
-  <label for="data">Data do Evento</label>
-  <input type="date" id="data" name="data" required>
+    <label>Local</label>
+    <input type="text" name="local">
 
-  <label for="r4a">R-4a</label>
-  <input type="number" id="r4a" name="r4a" min="0" value="0">
+    <div class="grid">
+      <div>
+        <label>R-4a</label>
+        <input type="number" name="r4a" value="0">
+      </div>
+      <div>
+        <label>R-4b</label>
+        <input type="number" name="r4b" value="0">
+      </div>
+      <div>
+        <label>R-6a</label>
+        <input type="number" name="r6a" value="0">
+      </div>
+      <div>
+        <label>R-6c</label>
+        <input type="number" name="r6c" value="0">
+      </div>
+      <div>
+        <label>Cone</label>
+        <input type="number" name="cone" value="0">
+      </div>
+      <div>
+        <label>Cavalete</label>
+        <input type="number" name="cavalete" value="0">
+      </div>
+      <div>
+        <label>Fita Zebrada</label>
+        <input type="number" name="fita" value="0">
+      </div>
+      <div>
+        <label>Barreira</label>
+        <input type="number" name="barreira" value="0">
+      </div>
+      <div>
+        <label>PMV</label>
+        <input type="number" name="pmv" value="0">
+      </div>
+      <div>
+        <label>Agentes</label>
+        <input type="number" name="agentes" value="0">
+      </div>
+      <div>
+        <label>Horas de Agentes</label>
+        <input type="number" name="horas_agentes" value="0">
+      </div>
+      <div>
+        <label>Qtd. Carro</label>
+        <input type="number" name="carro_qtd" value="0">
+      </div>
+      <div>
+        <label>Horas Carro</label>
+        <input type="number" name="carro_horas" value="0">
+      </div>
+      <div>
+        <label>Qtd. Moto</label>
+        <input type="number" name="moto_qtd" value="0">
+      </div>
+      <div>
+        <label>Horas Moto</label>
+        <input type="number" name="moto_horas" value="0">
+      </div>
+    </div>
 
-  <label for="r4b">R-4b</label>
-  <input type="number" id="r4b" name="r4b" min="0" value="0">
-
-  <label for="r6a">R-6a</label>
-  <input type="number" id="r6a" name="r6a" min="0" value="0">
-
-  <label for="r6c">R-6c</label>
-  <input type="number" id="r6c" name="r6c" min="0" value="0">
-
-  <label for="cone">Cone</label>
-  <input type="number" id="cone" name="cone" min="0" value="0">
-
-  <label for="cavalete">Cavalete</label>
-  <input type="number" id="cavalete" name="cavalete" min="0" value="0">
-
-  <label for="fita">Fita Zebrada</label>
-  <input type="number" id="fita" name="fita" min="0" value="0">
-
-  <label for="barreira">Barreira</label>
-  <input type="number" id="barreira" name="barreira" min="0" value="0">
-
-  <label for="pmv">PMV</label>
-  <input type="number" id="pmv" name="pmv" min="0" value="0">
-
-  <label for="agentes">Agentes</label>
-  <input type="number" id="agentes" name="agentes" min="0" value="0">
-
-  <label for="horas_agentes">Horas de Agentes</label>
-  <input type="number" id="horas_agentes" name="horas_agentes" min="0" value="0">
-
-  <label for="carro_qtd">Carro (Qtd)</label>
-  <input type="number" id="carro_qtd" name="carro_qtd" min="0" value="0">
-
-  <label for="carro_horas">Horas de Carro</label>
-  <input type="number" id="carro_horas" name="carro_horas" min="0" value="0">
-
-  <label for="moto_qtd">Moto (Qtd)</label>
-  <input type="number" id="moto_qtd" name="moto_qtd" min="0" value="0">
-
-  <label for="moto_horas">Horas de Moto</label>
-  <input type="number" id="moto_horas" name="moto_horas" min="0" value="0">
-
-  <button type="submit">Enviar</button>
-  
-  <div class="msg" id="msg"></div>
-</form>
+    <button type="submit">Enviar Solicitação</button>
+  </form>
+</div>
 
 <script>
-  const URL = "https://script.google.com/macros/s/SEU_ID_DO_WEB_APP/exec"; // Substitua com a URL do seu Web App
+  const form = document.getElementById('form');
 
-  document.getElementById("form").addEventListener("submit", async (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const dados = {
-      protocolo: document.getElementById("protocolo").value,
-      evento: document.getElementById("evento").value,
-      local: document.getElementById("local").value,
-      data: document.getElementById("data").value,
+    const dados = Object.fromEntries(new FormData(form));
+    dados.data_envio = new Date().toISOString();
 
-      r4a: document.getElementById("r4a").value,
-      r4b: document.getElementById("r4b").value,
-      r6a: document.getElementById("r6a").value,
-      r6c: document.getElementById("r6c").value,
+    const resposta = await fetch("COLE_AQUI_A_URL_DO_APPS_SCRIPT", {
+      method: "POST",
+      body: JSON.stringify(dados),
+      headers: { "Content-Type": "application/json" }
+    });
 
-      cone: document.getElementById("cone").value,
-      cavalete: document.getElementById("cavalete").value,
-      fita: document.getElementById("fita").value,
-      barreira: document.getElementById("barreira").value,
-      pmv: document.getElementById("pmv").value,
-
-      agentes: document.getElementById("agentes").value,
-      horas_agentes: document.getElementById("horas_agentes").value,
-
-      carro_qtd: document.getElementById("carro_qtd").value,
-      carro_horas: document.getElementById("carro_horas").value,
-
-      moto_qtd: document.getElementById("moto_qtd").value,
-      moto_horas: document.getElementById("moto_horas").value
-    };
-
-    try {
-      const res = await fetch(URL, {
-        method: "POST",
-        body: JSON.stringify(dados)
-      });
-
-      const r = await res.json();
-      if (r.status === "sucesso") {
-        document.getElementById("msg").innerText = "✅ Enviado com sucesso!";
-        e.target.reset(); // Limpa o formulário
-      } else {
-        document.getElementById("msg").innerText = "❌ Erro: " + r.mensagem;
-      }
-    } catch (err) {
-      document.getElementById("msg").innerText = "❌ Erro ao enviar";
-    }
+    const resultado = await resposta.json();
+    alert("Enviado com sucesso! Linha: " + resultado.linha);
+    form.reset();
   });
 </script>
 
