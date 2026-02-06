@@ -126,7 +126,7 @@ form.addEventListener("submit", e => {
     if (el.name) dados[el.name] = el.value;
   });
 
-  fetch("COLE_AQUI_A_URL_DO_APPS_SCRIPT", {
+  fetch("https://script.google.com/macros/s/AKfycbymcK8C1F4sC41YD8QOb_7SZb-E50TZtMHXZ_4rVZ69NNFP6DzX132XxvHDSWz_GuJZBA/exec", {
     method: "POST",
     body: JSON.stringify(dados),
     headers: { "Content-Type": "application/json" }
@@ -139,3 +139,4 @@ form.addEventListener("submit", e => {
 
 </body>
 </html>
+
