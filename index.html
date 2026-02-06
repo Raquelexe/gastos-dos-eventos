@@ -116,27 +116,39 @@
 </form>
 
 <script>
-const form = document.getElementById("formEvento");
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbymcK8C1F4sC41YD8QOb_7SZb-E50TZtMHXZ_4rVZ69NNFP6DzX132XxvHDSWz_GuJZBA/exec";
 
-form.addEventListener("submit", e => {
+document.getElementById("formEvento").addEventListener("submit", function (e) {
   e.preventDefault();
 
+  const formData = new FormData(this);
   const dados = {};
-  [...form.elements].forEach(el => {
-    if (el.name) dados[el.name] = el.value;
+
+  formData.forEach((valor, chave) => {
+    dados[chave] = valor === "" ? 0 : valor;
   });
 
-  fetch("https://script.google.com/macros/s/AKfycbymcK8C1F4sC41YD8QOb_7SZb-E50TZtMHXZ_4rVZ69NNFP6DzX132XxvHDSWz_GuJZBA/exec", {
+  fetch(SCRIPT_URL, {
     method: "POST",
-    body: JSON.stringify(dados),
-    headers: { "Content-Type": "application/json" }
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(dados)
   })
-  .then(r => r.text())
-  .then(() => alert("Solicitação enviada com sucesso"))
-  .catch(() => alert("Erro ao enviar"));
+  .then(res => res.text())
+  .then(() => {
+    alert("Enviado com sucesso!");
+    this.reset();
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Erro ao enviar");
+  });
 });
 </script>
 
+
 </body>
 </html>
+
 
