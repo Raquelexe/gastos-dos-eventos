@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Registro de Evento</title>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    padding: 30px;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  form {
+    max-width: 700px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+
+  h2 {
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+    margin-top: 30px;
+  }
+
+  .campo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  label {
+    flex: 1;
+  }
+
+  input {
+    width: 120px;
+    padding: 5px;
+  }
+
+  button {
+    margin-top: 30px;
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    background: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #125aa0;
+  }
+</style>
+</head>
+
+<body>
+
+<h1>Registro de Evento</h1>
+
+<form id="formEvento">
+
+  <h2>Dados do Evento</h2>
+
+  <div class="campo">
+    <label>Protocolo</label>
+    <input type="text" name="protocolo" required>
+  </div>
+
+  <div class="campo">
+    <label>Nome do evento</label>
+    <input type="text" name="evento" required>
+  </div>
+
+  <div class="campo">
+    <label>Local</label>
+    <input type="text" name="local" required>
+  </div>
+
+  <h2>Materiais</h2>
+
+  <div class="campo"><label>Placa R-4a</label><input type="number" name="r4a" min="0" value="0"></div>
+  <div class="campo"><label>Placa R-4b</label><input type="number" name="r4b" min="0" value="0"></div>
+  <div class="campo"><label>Placa R-6a</label><input type="number" name="r6a" min="0" value="0"></div>
+  <div class="campo"><label>Placa R-6c</label><input type="number" name="r6c" min="0" value="0"></div>
+  <div class="campo"><label>Cone</label><input type="number" name="cone" min="0" value="0"></div>
+  <div class="campo"><label>Cavalete</label><input type="number" name="cavalete" min="0" value="0"></div>
+  <div class="campo"><label>Fita Zebra</label><input type="number" name="fita" min="0" value="0"></div>
+  <div class="campo"><label>Barreira</label><input type="number" name="barreira" min="0" value="0"></div>
+  <div class="campo"><label>PMV</label><input type="number" name="pmv" min="0" value="0"></div>
+
+  <h2>Agentes</h2>
+
+  <div class="campo"><label>Quantidade</label><input type="number" name="agentes" min="0" value="0"></div>
+  <div class="campo"><label>Horas de atuação</label><input type="number" name="horas_agentes" min="0" value="0"></div>
+
+  <h2>Veículos</h2>
+
+  <div class="campo"><label>Carro (Pickup)</label><input type="number" name="carro_qtd" min="0" value="0"></div>
+  <div class="campo"><label>Horas – Carro</label><input type="number" name="carro_horas" min="0" value="0"></div>
+
+  <div class="campo"><label>Moto</label><input type="number" name="moto_qtd" min="0" value="0"></div>
+  <div class="campo"><label>Horas – Moto</label><input type="number" name="moto_horas" min="0" value="0"></div>
+
+  <button type="submit">Enviar solicitação</button>
+</form>
+
+<script>
+const form = document.getElementById("formEvento");
+
+form.addEventListener("submit", e => {
+  e.preventDefault();
+
+  const dados = {};
+  [...form.elements].forEach(el => {
+    if (el.name) dados[el.name] = el.value;
+  });
+
+  fetch("COLE_AQUI_A_URL_DO_APPS_SCRIPT", {
+    method: "POST",
+    body: JSON.stringify(dados),
+    headers: { "Content-Type": "application/json" }
+  })
+  .then(r => r.text())
+  .then(() => alert("Solicitação enviada com sucesso"))
+  .catch(() => alert("Erro ao enviar"));
+});
+</script>
+
+</body>
+</html>
