@@ -1,172 +1,579 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Solicitação de Interdição</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f6f8;
-      margin: 0;
-      padding: 20px;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: auto;
-      background: #ffffff;
-      padding: 25px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 25px;
-    }
-
-    label {
-      font-weight: bold;
-      margin-top: 15px;
-      display: block;
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      font-size: 14px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-    }
-
-    button {
-      margin-top: 25px;
-      width: 100%;
-      padding: 14px;
-      background: #1976d2;
-      color: #fff;
-      border: none;
-      font-size: 16px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #135ba1;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Sistema de Cálculo de Custo de Sinalização</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 30px;
+    min-height: 100vh;
+  }
+  
+  .container {
+    max-width: 900px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  }
+  
+  h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #667eea;
+  }
+  
+  .section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    border-left: 5px solid #667eea;
+  }
+  
+  .section-title {
+    color: #667eea;
+    margin-top: 0;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .section-title i {
+    font-size: 24px;
+  }
+  
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+    font-size: 14px;
+  }
+  
+  input, select {
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s;
+  }
+  
+  input:focus, select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  }
+  
+  button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 16px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 7px 20px rgba(102, 126, 234, 0.4);
+  }
+  
+  button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  
+  .material-card {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    border: 2px solid #e8eaf6;
+    transition: all 0.3s;
+  }
+  
+  .material-card:hover {
+    border-color: #667eea;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+  }
+  
+  #mensagem {
+    margin-top: 25px;
+    padding: 20px;
+    border-radius: 10px;
+    display: none;
+    font-weight: 600;
+    font-size: 15px;
+    text-align: center;
+  }
+  
+  .sucesso {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 2px solid #c8e6c9;
+  }
+  
+  .erro {
+    background: #ffebee;
+    color: #c62828;
+    border: 2px solid #ffcdd2;
+  }
+  
+  .info {
+    background: #e3f2fd;
+    color: #1565c0;
+    border: 2px solid #bbdefb;
+  }
+  
+  .link-planilha {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 15px;
+    background: #4285f4;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.3s;
+  }
+  
+  .link-planilha:hover {
+    background: #3367d6;
+  }
+  
+  .counter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .counter button {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    margin: 0;
+    font-size: 20px;
+  }
+  
+  .counter input {
+    width: 80px;
+    text-align: center;
+  }
+</style>
 </head>
 <body>
 
 <div class="container">
-  <h1>Solicitação de Interdição</h1>
-
-  <form id="form">
-
-    <label>Protocolo</label>
-    <input type="text" name="protocolo" required>
-
-    <label>Evento</label>
-    <input type="text" name="evento">
-
-    <label>Local</label>
-    <input type="text" name="local">
-
-    <div class="grid">
-      <div>
-        <label>R-4a</label>
-        <input type="number" name="r4a" value="0">
-      </div>
-      <div>
-        <label>R-4b</label>
-        <input type="number" name="r4b" value="0">
-      </div>
-      <div>
-        <label>R-6a</label>
-        <input type="number" name="r6a" value="0">
-      </div>
-      <div>
-        <label>R-6c</label>
-        <input type="number" name="r6c" value="0">
-      </div>
-      <div>
-        <label>Cone</label>
-        <input type="number" name="cone" value="0">
-      </div>
-      <div>
-        <label>Cavalete</label>
-        <input type="number" name="cavalete" value="0">
-      </div>
-      <div>
-        <label>Fita Zebrada</label>
-        <input type="number" name="fita" value="0">
-      </div>
-      <div>
-        <label>Barreira</label>
-        <input type="number" name="barreira" value="0">
-      </div>
-      <div>
-        <label>PMV</label>
-        <input type="number" name="pmv" value="0">
-      </div>
-      <div>
-        <label>Agentes</label>
-        <input type="number" name="agentes" value="0">
-      </div>
-      <div>
-        <label>Horas de Agentes</label>
-        <input type="number" name="horas_agentes" value="0">
-      </div>
-      <div>
-        <label>Qtd. Carro</label>
-        <input type="number" name="carro_qtd" value="0">
-      </div>
-      <div>
-        <label>Horas Carro</label>
-        <input type="number" name="carro_horas" value="0">
-      </div>
-      <div>
-        <label>Qtd. Moto</label>
-        <input type="number" name="moto_qtd" value="0">
-      </div>
-      <div>
-        <label>Horas Moto</label>
-        <input type="number" name="moto_horas" value="0">
+  <h1>📋 Cálculo de Custo de Sinalização para Eventos</h1>
+  
+  <form id="formEvento">
+    
+    <div class="section">
+      <h2 class="section-title">📄 DADOS DO EVENTO</h2>
+      <div class="grid-2">
+        <div class="form-group">
+          <label>🔖 Protocolo</label>
+          <input type="text" name="protocolo" required placeholder="Ex: EV-2024-001">
+        </div>
+        <div class="form-group">
+          <label>📅 Data do Evento</label>
+          <input type="date" name="data_evento" required>
+        </div>
+        <div class="form-group">
+          <label>🏷️ Nome do Evento</label>
+          <input type="text" name="evento" required placeholder="Nome completo do evento">
+        </div>
+        <div class="form-group">
+          <label>📍 Local do Evento</label>
+          <input type="text" name="local" required placeholder="Endereço completo">
+        </div>
       </div>
     </div>
-
-    <button type="submit">Enviar Solicitação</button>
+    
+    <div class="section">
+      <h2 class="section-title">🛠️ PLACAS DE SINALIZAÇÃO</h2>
+      <div class="grid-3">
+        <div class="material-card">
+          <label>Placa R-4a</label>
+          <div class="counter">
+            <button type="button" class="decrement" data-field="r4a">-</button>
+            <input type="number" name="r4a" min="0" value="0">
+            <button type="button" class="increment" data-field="r4a">+</button>
+          </div>
+        </div>
+        <div class="material-card">
+          <label>Placa R-4b</label>
+          <div class="counter">
+            <button type="button" class="decrement" data-field="r4b">-</button>
+            <input type="number" name="r4b" min="0" value="0">
+            <button type="button" class="increment" data-field="r4b">+</button>
+          </div>
+        </div>
+        <div class="material-card">
+          <label>Placa R-6a</label>
+          <div class="counter">
+            <button type="button" class="decrement" data-field="r6a">-</button>
+            <input type="number" name="r6a" min="0" value="0">
+            <button type="button" class="increment" data-field="r6a">+</button>
+          </div>
+        </div>
+        <div class="material-card">
+          <label>Placa R-6c</label>
+          <div class="counter">
+            <button type="button" class="decrement" data-field="r6c">-</button>
+            <input type="number" name="r6c" min="0" value="0">
+            <button type="button" class="increment" data-field="r6c">+</button>
+          </div>
+        </div>
+        <div class="material-card">
+          <label>Placa R-25a</label>
+          <div class="counter">
+            <button type="button" class="decrement" data-field="r25a">-</button>
+            <input type="number" name="r25a" min="0" value="0">
+            <button type="button" class="increment" data-field="r25a">+</button>
+          </div>
+        </div>
+        <div class="material-card">
+          <label>Placa R-25b</label>
+          <div class="counter">
+            <button type="button" class="decrement" data-field="r25b">-</button>
+            <input type="number" name="r25b" min="0" value="0">
+            <button type="button" class="increment" data-field="r25b">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-title">🚧 EQUIPAMENTOS DE SINALIZAÇÃO</h2>
+      <div class="grid-3">
+        <div class="material-card">
+          <label>Cone</label>
+          <div class="counter">
+            <button type="button" class="decrement" data-field="cone">-</button>
+            <input type="number" name="cone" min="0" value="0">
+            <button type="button" class="increment" data-field="cone">+</button>
+          </div>
+        </div>
+        <div class="material-card">
+          <label>Cavalete</label>
+          <div class="counter">
+            <button type="button" class="decrement" data-field="cavalete">-</button>
+            <input type="number" name="cavalete" min="0" value="0">
+            <button type="button" class="increment" data-field="cavalete">+</button>
+          </div>
+        </div>
+        <div class="material-card">
+          <label>Fita Zebra (metros)</label>
+          <input type="number" name="fita" min="0" value="0" placeholder="Metros">
+        </div>
+        <div class="material-card">
+          <label>Barreira</label>
+          <div class="counter">
+            <button type="button" class="decrement" data-field="barreira">-</button>
+            <input type="number" name="barreira" min="0" value="0">
+            <button type="button" class="increment" data-field="barreira">+</button>
+          </div>
+        </div>
+        <div class="material-card">
+          <label>Balizador Cilíndrico</label>
+          <div class="counter">
+            <button type="button" class="decrement" data-field="balizador_cilindrico">-</button>
+            <input type="number" name="balizador_cilindrico" min="0" value="0">
+            <button type="button" class="increment" data-field="balizador_cilindrico">+</button>
+          </div>
+        </div>
+        <div class="material-card">
+          <label>Balizador Cônico</label>
+          <div class="counter">
+            <button type="button" class="decrement" data-field="balizador_conico">-</button>
+            <input type="number" name="balizador_conico" min="0" value="0">
+            <button type="button" class="increment" data-field="balizador_conico">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-title">📟 EQUIPAMENTOS ESPECIAIS</h2>
+      <div class="grid-2">
+        <div class="material-card">
+          <label>PMV - Painel Mensagem Variável (horas)</label>
+          <input type="number" name="pmv" min="0" value="0" step="0.5" placeholder="Horas">
+        </div>
+        <div class="material-card">
+          <label>Placa de Sinalização (1m²)</label>
+          <div class="counter">
+            <button type="button" class="decrement" data-field="placa_1m2">-</button>
+            <input type="number" name="placa_1m2" min="0" value="0">
+            <button type="button" class="increment" data-field="placa_1m2">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-title">👥 RECURSOS HUMANOS</h2>
+      <div class="grid-2">
+        <div class="material-card">
+          <label>Quantidade de Agentes</label>
+          <div class="counter">
+            <button type="button" class="decrement" data-field="agentes">-</button>
+            <input type="number" name="agentes" min="0" value="0">
+            <button type="button" class="increment" data-field="agentes">+</button>
+          </div>
+        </div>
+        <div class="material-card">
+          <label>Horas de Atuação</label>
+          <input type="number" name="horas_agentes" min="0" value="0" step="0.5" placeholder="Horas">
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-title">🚗 VEÍCULOS</h2>
+      <div class="grid-2">
+        <div class="material-card">
+          <label>Carro (Pickup) - Quantidade</label>
+          <div class="counter">
+            <button type="button" class="decrement" data-field="carro_qtd">-</button>
+            <input type="number" name="carro_qtd" min="0" value="0">
+            <button type="button" class="increment" data-field="carro_qtd">+</button>
+          </div>
+        </div>
+        <div class="material-card">
+          <label>Horas de Uso - Carro</label>
+          <input type="number" name="carro_horas" min="0" value="0" step="0.5" placeholder="Horas">
+        </div>
+        <div class="material-card">
+          <label>Moto - Quantidade</label>
+          <div class="counter">
+            <button type="button" class="decrement" data-field="moto_qtd">-</button>
+            <input type="number" name="moto_qtd" min="0" value="0">
+            <button type="button" class="increment" data-field="moto_qtd">+</button>
+          </div>
+        </div>
+        <div class="material-card">
+          <label>Horas de Uso - Moto</label>
+          <input type="number" name="moto_horas" min="0" value="0" step="0.5" placeholder="Horas">
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2 class="section-title">📏 CÁLCULO DE LOTAÇÃO</h2>
+      <div class="grid-2">
+        <div class="material-card">
+          <label>Área do Evento (m²)</label>
+          <input type="number" name="area_m2" min="0" value="0" step="0.01" placeholder="m²">
+        </div>
+        <div class="material-card">
+          <label>Tipo de Área</label>
+          <select name="tipo_area">
+            <option value="externa">Área Externa/Descoberta</option>
+            <option value="interna">Área Interna/Coberta</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    
+    <button type="submit" id="btnEnviar">📤 GERAR PLANILHA DE CUSTOS</button>
+    <div id="mensagem"></div>
   </form>
 </div>
 
 <script>
-  const form = document.getElementById('form');
+const URL = "https://script.google.com/macros/s/AKfycbyl3XpWMqTCVQuqFdrJbw1mXqDjLxBAhCgaMWtAu31pImRIBc8Hr546Fjk8kmFhBrCiSA/exec";
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+// Sistema de incremento/decremento
+document.querySelectorAll('.increment').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const field = btn.getAttribute('data-field');
+    const input = document.querySelector(`[name="${field}"]`);
+    input.value = parseInt(input.value) + 1;
+  });
+});
 
-    const dados = Object.fromEntries(new FormData(form));
-    dados.data_envio = new Date().toISOString();
+document.querySelectorAll('.decrement').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const field = btn.getAttribute('data-field');
+    const input = document.querySelector(`[name="${field}"]`);
+    if (parseInt(input.value) > 0) {
+      input.value = parseInt(input.value) - 1;
+    }
+  });
+});
 
-    const resposta = await fetch("COLE_AQUI_A_URL_DO_APPS_SCRIPT", {
-      method: "POST",
+// Envio do formulário
+document.getElementById("formEvento").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  
+  const form = e.target;
+  const mensagem = document.getElementById("mensagem");
+  const btnEnviar = document.getElementById("btnEnviar");
+  const textoOriginal = btnEnviar.textContent;
+  
+  btnEnviar.textContent = "⏳ Gerando planilha...";
+  btnEnviar.disabled = true;
+  mensagem.style.display = "none";
+
+  const dados = {
+    protocolo: form.protocolo.value,
+    evento: form.evento.value,
+    local: form.local.value,
+    data_evento: form.data_evento.value,
+    
+    // Placas
+    r4a: form.r4a.value || 0,
+    r4b: form.r4b.value || 0,
+    r6a: form.r6a.value || 0,
+    r6c: form.r6c.value || 0,
+    r25a: form.r25a.value || 0,
+    r25b: form.r25b.value || 0,
+    r3: form.r3.value || 0,
+    
+    // Equipamentos
+    cone: form.cone.value || 0,
+    cavalete: form.cavalete.value || 0,
+    fita: form.fita.value || 0,
+    barreira: form.barreira.value || 0,
+    balizador_cilindrico: form.balizador_cilindrico.value || 0,
+    balizador_conico: form.balizador_conico.value || 0,
+    barreira_pantografica: form.barreira_pantografica.value || 0,
+    barreira_plastica: form.barreira_plastica.value || 0,
+    pilarete: form.pilarete.value || 0,
+    pmv: form.pmv.value || 0,
+    placa_1m2: form.placa_1m2.value || 0,
+    
+    // Recursos
+    agentes: form.agentes.value || 0,
+    horas_agentes: form.horas_agentes.value || 0,
+    
+    // Veículos
+    carro_qtd: form.carro_qtd.value || 0,
+    carro_horas: form.carro_horas.value || 0,
+    moto_qtd: form.moto_qtd.value || 0,
+    moto_horas: form.moto_horas.value || 0,
+    
+    // Lotação
+    area_m2: form.area_m2.value || 0,
+    tipo_area: form.tipo_area.value
+  };
+
+  try {
+    console.log("📤 Enviando dados para planilha modelo:", dados);
+    
+    const response = await fetch(URL, {
+      method: 'POST',
       body: JSON.stringify(dados),
-      headers: { "Content-Type": "application/json" }
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
 
-    const resultado = await resposta.json();
-    alert("Enviado com sucesso! Linha: " + resultado.linha);
-    form.reset();
-  });
+    const resultado = await response.json();
+    console.log("✅ Resposta:", resultado);
+    
+    if (resultado.status === "sucesso") {
+      let mensagemHTML = `
+        <div class="sucesso">
+          <h3>✅ PLANILHA GERADA COM SUCESSO!</h3>
+          <p><strong>Protocolo:</strong> ${resultado.protocolo}</p>
+          <p><strong>Aba criada:</strong> ${resultado.aba}</p>
+          <p>A planilha de custos foi gerada com todos os cálculos automáticos.</p>
+          <a href="${resultado.link}" target="_blank" class="link-planilha">
+            📊 ABRIR PLANILHA COMPLETA
+          </a>
+          <p style="margin-top: 15px; font-size: 14px;">
+            <em>Os cálculos de custo já estão aplicados automaticamente na planilha.</em>
+          </p>
+        </div>
+      `;
+      
+      mensagem.innerHTML = mensagemHTML;
+      mensagem.style.display = "block";
+      
+      // Não limpar o formulário completamente, apenas alguns campos
+      form.evento.value = '';
+      form.local.value = '';
+      
+      // Incrementar protocolo para próximo evento
+      const protocoloAtual = dados.protocolo;
+      if (protocoloAtual.match(/EV-(\d{4})-(\d+)/)) {
+        const match = protocoloAtual.match(/EV-(\d{4})-(\d+)/);
+        const ano = match[1];
+        const num = parseInt(match[2]);
+        form.protocolo.value = `EV-${ano}-${(num + 1).toString().padStart(3, '0')}`;
+      }
+      
+    } else {
+      throw new Error(resultado.mensagem || "Erro ao gerar planilha");
+    }
+
+  } catch (err) {
+    console.error("❌ Erro:", err);
+    
+    mensagem.innerHTML = `
+      <div class="erro">
+        <h3>❌ ERRO AO GERAR PLANILHA</h3>
+        <p>${err.message}</p>
+        <p style="margin-top: 15px; font-size: 14px;">
+          Verifique se a planilha modelo está acessível e tente novamente.
+        </p>
+      </div>
+    `;
+    mensagem.style.display = "block";
+    
+  } finally {
+    btnEnviar.textContent = textoOriginal;
+    btnEnviar.disabled = false;
+  }
+});
+
+// Configuração inicial
+window.addEventListener('load', () => {
+  const hoje = new Date().toISOString().split('T')[0];
+  document.querySelector('input[name="data_evento"]').value = hoje;
+  
+  const protocoloInput = document.querySelector('input[name="protocolo"]');
+  if (!protocoloInput.value) {
+    const ano = new Date().getFullYear();
+    const mes = (new Date().getMonth() + 1).toString().padStart(2, '0');
+    protocoloInput.value = `EV-${ano}-${mes}-001`;
+  }
+});
 </script>
 
 </body>
