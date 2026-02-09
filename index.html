@@ -1,392 +1,199 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
 <head>
 <meta charset="UTF-8">
 <title>Sistema de Eventos</title>
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f5f5f5;
-  padding: 20px;
-}
-.container {
-  max-width: 900px;
-  margin: 0 auto;
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-h1 {
-  text-align: center;
-  color: #333;
-  margin-bottom: 30px;
-}
-h2 {
-  color: #1976d2;
-  border-bottom: 2px solid #eee;
-  padding-bottom: 10px;
-  margin-top: 30px;
-}
-.form-group {
-  margin-bottom: 15px;
-}
-label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-  color: #333;
-}
-input, select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 14px;
-}
-.row {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 15px;
-}
-.row > div {
-  flex: 1;
-}
-.material-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 15px;
-  margin: 15px 0;
-}
-.material-item {
-  background: #f8f9fa;
-  padding: 15px;
-  border-radius: 5px;
-  border: 1px solid #e0e0e0;
-}
-.material-item label {
-  font-size: 13px;
-}
-button {
-  width: 100%;
-  padding: 15px;
-  background: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 30px;
-}
-button:hover {
-  background: #45a049;
-}
-#mensagem {
-  margin-top: 20px;
-  padding: 15px;
-  border-radius: 5px;
-  display: none;
-}
-.sucesso {
-  background: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-}
-.erro {
-  background: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-}
-.counter {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 5px;
-}
-.counter button {
-  width: 30px;
-  height: 30px;
-  padding: 0;
-  margin: 0;
-  background: #1976d2;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-}
-.counter input {
-  flex: 1;
-  text-align: center;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial; background: #f0f0f0; padding: 20px; }
+.container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 10px; }
+h1 { text-align: center; margin-bottom: 20px; color: #333; }
+.section { margin-bottom: 20px; padding: 15px; background: #f9f9f9; border-radius: 5px; }
+.section h2 { color: #1976d2; margin-bottom: 10px; }
+.form-group { margin-bottom: 10px; }
+label { display: block; margin-bottom: 5px; font-weight: bold; }
+input, select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+.row { display: flex; gap: 10px; margin-bottom: 10px; }
+.row > div { flex: 1; }
+button { width: 100%; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
+button:hover { background: #45a049; }
+#resultado { margin-top: 20px; padding: 15px; border-radius: 5px; display: none; }
+.sucesso { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+.erro { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <h1>📊 Sistema de Cálculo de Eventos</h1>
+  <h1>📋 Registro de Eventos</h1>
   
-  <form id="formEvento">
+  <form id="meuForm">
     
-    <h2>📄 Dados do Evento</h2>
-    <div class="row">
-      <div class="form-group">
-        <label>Protocolo *</label>
-        <input type="text" name="protocolo" required id="protocolo">
-      </div>
-      <div class="form-group">
-        <label>Data do Evento *</label>
-        <input type="date" name="data_evento" required id="data_evento">
-      </div>
-    </div>
-    
-    <div class="form-group">
-      <label>Nome do Evento *</label>
-      <input type="text" name="evento" required>
-    </div>
-    
-    <div class="form-group">
-      <label>Local *</label>
-      <input type="text" name="local" required>
-    </div>
-    
-    <h2>🛠️ Placas de Sinalização</h2>
-    <div class="material-grid">
-      <div class="material-item">
-        <label>Placa R-4a</label>
-        <div class="counter">
-          <button type="button" onclick="alterarQuantidade('r4a', -1)">-</button>
-          <input type="number" name="r4a" value="0" min="0">
-          <button type="button" onclick="alterarQuantidade('r4a', 1)">+</button>
+    <div class="section">
+      <h2>Dados do Evento</h2>
+      <div class="row">
+        <div class="form-group">
+          <label>Protocolo:</label>
+          <input type="text" id="protocolo" value="EV-2024-001" required>
+        </div>
+        <div class="form-group">
+          <label>Data do Evento:</label>
+          <input type="date" id="data_evento" required>
         </div>
       </div>
-      <div class="material-item">
-        <label>Placa R-4b</label>
-        <div class="counter">
-          <button type="button" onclick="alterarQuantidade('r4b', -1)">-</button>
-          <input type="number" name="r4b" value="0" min="0">
-          <button type="button" onclick="alterarQuantidade('r4b', 1)">+</button>
+      <div class="form-group">
+        <label>Nome do Evento:</label>
+        <input type="text" id="evento" value="Evento Teste" required>
+      </div>
+      <div class="form-group">
+        <label>Local:</label>
+        <input type="text" id="local" value="Local Teste" required>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>Placas</h2>
+      <div class="row">
+        <div class="form-group">
+          <label>R-4a:</label>
+          <input type="number" id="r4a" value="2" min="0">
+        </div>
+        <div class="form-group">
+          <label>R-4b:</label>
+          <input type="number" id="r4b" value="1" min="0">
         </div>
       </div>
-      <div class="material-item">
-        <label>Placa R-6a</label>
-        <div class="counter">
-          <button type="button" onclick="alterarQuantidade('r6a', -1)">-</button>
-          <input type="number" name="r6a" value="0" min="0">
-          <button type="button" onclick="alterarQuantidade('r6a', 1)">+</button>
+      <div class="row">
+        <div class="form-group">
+          <label>R-6a:</label>
+          <input type="number" id="r6a" value="3" min="0">
+        </div>
+        <div class="form-group">
+          <label>R-6c:</label>
+          <input type="number" id="r6c" value="1" min="0">
         </div>
       </div>
-      <div class="material-item">
-        <label>Placa R-6c</label>
-        <div class="counter">
-          <button type="button" onclick="alterarQuantidade('r6c', -1)">-</button>
-          <input type="number" name="r6c" value="0" min="0">
-          <button type="button" onclick="alterarQuantidade('r6c', 1)">+</button>
+    </div>
+    
+    <div class="section">
+      <h2>Equipamentos</h2>
+      <div class="row">
+        <div class="form-group">
+          <label>Cone:</label>
+          <input type="number" id="cone" value="10" min="0">
+        </div>
+        <div class="form-group">
+          <label>Cavalete:</label>
+          <input type="number" id="cavalete" value="5" min="0">
         </div>
       </div>
-      <div class="material-item">
-        <label>Placa R-25a</label>
-        <input type="number" name="r25a" value="0" min="0">
-      </div>
-      <div class="material-item">
-        <label>Placa R-25b</label>
-        <input type="number" name="r25b" value="0" min="0">
-      </div>
-      <div class="material-item">
-        <label>Placa R-3</label>
-        <input type="number" name="r3" value="0" min="0">
-      </div>
-    </div>
-    
-    <h2>🚧 Equipamentos</h2>
-    <div class="material-grid">
-      <div class="material-item">
-        <label>Cone</label>
-        <div class="counter">
-          <button type="button" onclick="alterarQuantidade('cone', -1)">-</button>
-          <input type="number" name="cone" value="0" min="0">
-          <button type="button" onclick="alterarQuantidade('cone', 1)">+</button>
+      <div class="row">
+        <div class="form-group">
+          <label>Fita (metros):</label>
+          <input type="number" id="fita" value="50" min="0" step="0.5">
+        </div>
+        <div class="form-group">
+          <label>PMV (horas):</label>
+          <input type="number" id="pmv" value="8" min="0" step="0.5">
         </div>
       </div>
-      <div class="material-item">
-        <label>Cavalete</label>
-        <div class="counter">
-          <button type="button" onclick="alterarQuantidade('cavalete', -1)">-</button>
-          <input type="number" name="cavalete" value="0" min="0">
-          <button type="button" onclick="alterarQuantidade('cavalete', 1)">+</button>
+    </div>
+    
+    <div class="section">
+      <h2>Recursos</h2>
+      <div class="row">
+        <div class="form-group">
+          <label>Agentes:</label>
+          <input type="number" id="agentes" value="4" min="0">
+        </div>
+        <div class="form-group">
+          <label>Horas Agentes:</label>
+          <input type="number" id="horas_agentes" value="8" min="0" step="0.5">
         </div>
       </div>
-      <div class="material-item">
-        <label>Fita Zebra (metros)</label>
-        <input type="number" name="fita" value="0" min="0" step="0.5">
-      </div>
-      <div class="material-item">
-        <label>Barreira Pantográfica</label>
-        <input type="number" name="barreira_pantografica" value="0" min="0">
-      </div>
-      <div class="material-item">
-        <label>Barreira Plástica</label>
-        <input type="number" name="barreira_plastica" value="0" min="0">
-      </div>
-      <div class="material-item">
-        <label>Balizador Cônico</label>
-        <input type="number" name="balizador_conico" value="0" min="0">
-      </div>
-      <div class="material-item">
-        <label>Pilarete</label>
-        <input type="number" name="pilarete" value="0" min="0">
+      <div class="row">
+        <div class="form-group">
+          <label>Carros:</label>
+          <input type="number" id="carro_qtd" value="2" min="0">
+        </div>
+        <div class="form-group">
+          <label>Horas Carros:</label>
+          <input type="number" id="carro_horas" value="8" min="0" step="0.5">
+        </div>
       </div>
     </div>
     
-    <h2>📟 Equipamentos Especiais</h2>
-    <div class="row">
-      <div class="form-group">
-        <label>PMV (horas)</label>
-        <input type="number" name="pmv" value="0" min="0" step="0.5">
-      </div>
-      <div class="form-group">
-        <label>Placa 1m²</label>
-        <input type="number" name="placa_1m2" value="0" min="0">
-      </div>
-    </div>
+    <button type="button" onclick="enviarDados()">📤 ENVIAR PARA PLANILHA</button>
     
-    <h2>👥 Recursos Humanos</h2>
-    <div class="row">
-      <div class="form-group">
-        <label>Agentes</label>
-        <input type="number" name="agentes" value="0" min="0">
-      </div>
-      <div class="form-group">
-        <label>Horas Agentes</label>
-        <input type="number" name="horas_agentes" value="0" min="0" step="0.5">
-      </div>
-    </div>
-    
-    <h2>🚗 Veículos</h2>
-    <div class="row">
-      <div class="form-group">
-        <label>Carro (Pickup)</label>
-        <input type="number" name="carro_qtd" value="0" min="0">
-      </div>
-      <div class="form-group">
-        <label>Horas Carro</label>
-        <input type="number" name="carro_horas" value="0" min="0" step="0.5">
-      </div>
-      <div class="form-group">
-        <label>Moto</label>
-        <input type="number" name="moto_qtd" value="0" min="0">
-      </div>
-      <div class="form-group">
-        <label>Horas Moto</label>
-        <input type="number" name="moto_horas" value="0" min="0" step="0.5">
-      </div>
-    </div>
-    
-    <h2>📏 Lotação</h2>
-    <div class="row">
-      <div class="form-group">
-        <label>Área (m²)</label>
-        <input type="number" name="area_m2" value="0" min="0" step="0.01">
-      </div>
-      <div class="form-group">
-        <label>Tipo de Área</label>
-        <select name="tipo_area">
-          <option value="externa">Externa</option>
-          <option value="interna">Interna</option>
-        </select>
-      </div>
-    </div>
-    
-    <button type="submit">📤 Gerar Planilha</button>
-    
-    <div id="mensagem"></div>
+    <div id="resultado"></div>
   </form>
 </div>
 
 <script>
-function alterarQuantidade(campo, valor) {
-  const input = document.querySelector(`[name="${campo}"]`);
-  const atual = parseInt(input.value) || 0;
-  const novo = Math.max(0, atual + valor);
-  input.value = novo;
+function enviarDados() {
+  var dados = {
+    protocolo: document.getElementById('protocolo').value,
+    evento: document.getElementById('evento').value,
+    local: document.getElementById('local').value,
+    data_evento: document.getElementById('data_evento').value,
+    r4a: document.getElementById('r4a').value || 0,
+    r4b: document.getElementById('r4b').value || 0,
+    r6a: document.getElementById('r6a').value || 0,
+    r6c: document.getElementById('r6c').value || 0,
+    cone: document.getElementById('cone').value || 0,
+    cavalete: document.getElementById('cavalete').value || 0,
+    fita: document.getElementById('fita').value || 0,
+    pmv: document.getElementById('pmv').value || 0,
+    agentes: document.getElementById('agentes').value || 0,
+    horas_agentes: document.getElementById('horas_agentes').value || 0,
+    carro_qtd: document.getElementById('carro_qtd').value || 0,
+    carro_horas: document.getElementById('carro_horas').value || 0
+  };
+  
+  var resultado = document.getElementById('resultado');
+  resultado.style.display = 'none';
+  
+  // Método que SEMPRE funciona (sem CORS)
+  var form = document.createElement('form');
+  form.method = 'GET';
+  form.action = 'https://script.google.com/macros/s/AKfycbwthR3TocBv_VtsZVlJdVbPJZh5B-fbT6dmsEskJBDy9Y69KCwFwm5JUW0py1dS0nqQdA/exec';
+  
+  // Adicionar parâmetros
+  for (var key in dados) {
+    var input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = key;
+    input.value = dados[key];
+    form.appendChild(input);
+  }
+  
+  // Adicionar campo de ação
+  var acaoInput = document.createElement('input');
+  acaoInput.type = 'hidden';
+  acaoInput.name = 'acao';
+  acaoInput.value = 'salvar';
+  form.appendChild(acaoInput);
+  
+  document.body.appendChild(form);
+  form.submit();
+  
+  // Mostrar mensagem
+  resultado.innerHTML = '<div class="sucesso"><h3>✅ DADOS ENVIADOS!</h3><p>Verifique sua planilha Google.</p><p><a href="https://docs.google.com/spreadsheets/d/1OLBd15n1dKoPWmUkHTZOJT7Rh4OG5WYvgCUAgAUW5jQ/edit" target="_blank">📊 Abrir Planilha</a></p></div>';
+  resultado.style.display = 'block';
+  
+  // Limpar formulário após 3 segundos
+  setTimeout(function() {
+    document.getElementById('protocolo').value = 'EV-2024-002';
+    document.getElementById('evento').value = '';
+    document.getElementById('local').value = '';
+  }, 3000);
 }
 
-window.addEventListener('load', () => {
-  const hoje = new Date().toISOString().split('T')[0];
+// Configurar data atual
+window.onload = function() {
+  var hoje = new Date().toISOString().split('T')[0];
   document.getElementById('data_evento').value = hoje;
-  
-  const ano = new Date().getFullYear();
-  const mes = String(new Date().getMonth() + 1).padStart(2, '0');
-  const dia = String(new Date().getDate()).padStart(2, '0');
-  document.getElementById('protocolo').value = `EV-${ano}${mes}${dia}-001`;
-});
-
-document.getElementById('formEvento').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  
-  const form = e.target;
-  const mensagem = document.getElementById('mensagem');
-  const btn = form.querySelector('button[type="submit"]');
-  const textoOriginal = btn.textContent;
-  
-  btn.textContent = 'Enviando...';
-  btn.disabled = true;
-  mensagem.style.display = 'none';
-  
-  const formData = new FormData(form);
-  const dados = {};
-  formData.forEach((value, key) => {
-    dados[key] = value;
-  });
-  
-  const url = 'https://script.google.com/macros/s/AKfycbzXXyDS_ruPUH3WmzUSEBrEnF31_QiTrt7tzc_1Qys-yZCItYCIBuaBv8kyRVP6oWOwwQ/exec';
-  
-  try {
-    const urlParams = new URLSearchParams(dados).toString();
-    const response = await fetch(`${url}?${urlParams}`, {
-      method: 'POST',
-      mode: 'no-cors'
-    });
-    
-    mensagem.innerHTML = `
-      <div class="sucesso">
-        <h3>✅ Dados Enviados!</h3>
-        <p><strong>Protocolo:</strong> ${dados.protocolo}</p>
-        <p><strong>Evento:</strong> ${dados.evento}</p>
-        <p>Verifique sua planilha Google.</p>
-        <p><a href="https://docs.google.com/spreadsheets/d/1TGuHgHmnOLNM4sg-saCrn94As_4CBwCRIc7rjd7xOF0/edit" 
-           target="_blank" style="color: #155724; font-weight: bold;">
-          📊 Abrir Planilha
-        </a></p>
-      </div>
-    `;
-    mensagem.style.display = 'block';
-    
-    const protocoloAtual = dados.protocolo;
-    if (protocoloAtual.match(/(\d+)$/)) {
-      const num = parseInt(protocoloAtual.match(/(\d+)$/)[1]);
-      document.getElementById('protocolo').value = protocoloAtual.replace(/\d+$/, (num + 1).toString().padStart(3, '0'));
-    }
-    
-  } catch (error) {
-    mensagem.innerHTML = `
-      <div class="erro">
-        <h3>⚠️ Enviado (CORS ignorado)</h3>
-        <p>Os dados foram enviados para a planilha.</p>
-        <p><a href="https://docs.google.com/spreadsheets/d/1TGuHgHmnOLNM4sg-saCrn94As_4CBwCRIc7rjd7xOF0/edit" 
-           target="_blank" style="color: #721c24; font-weight: bold;">
-          📊 Verificar Planilha
-        </a></p>
-      </div>
-    `;
-    mensagem.style.display = 'block';
-    
-  } finally {
-    btn.textContent = textoOriginal;
-    btn.disabled = false;
-  }
-});
+};
 </script>
 
 </body>
