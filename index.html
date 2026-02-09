@@ -12,7 +12,7 @@ h1 { text-align: center; margin-bottom: 20px; color: #333; }
 .section h2 { color: #1976d2; margin-bottom: 10px; }
 .form-group { margin-bottom: 10px; }
 label { display: block; margin-bottom: 5px; font-weight: bold; }
-input, select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+input, select, textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
 .row { display: flex; gap: 10px; margin-bottom: 10px; }
 .row > div { flex: 1; }
 button { width: 100%; padding: 12px; background: #4CAF50; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
@@ -48,6 +48,23 @@ button:hover { background: #45a049; }
       <div class="form-group">
         <label>Local:</label>
         <input type="text" id="local" value="Local Teste" required>
+      </div>
+      <div class="row">
+        <div class="form-group">
+          <label>Área do Evento (m²):</label>
+          <input type="number" id="area_m2" value="2350" min="0" step="0.1">
+        </div>
+        <div class="form-group">
+          <label>Tipo de Área:</label>
+          <select id="tipo_area">
+            <option value="externo">Área Externa (AD)</option>
+            <option value="interno">Área Interna (AC)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Observações:</label>
+        <textarea id="observacoes" rows="3" placeholder="Descrição do evento, contexto, fase da obra..."></textarea>
       </div>
     </div>
     
@@ -136,6 +153,9 @@ function enviarDados() {
     evento: document.getElementById('evento').value,
     local: document.getElementById('local').value,
     data_evento: document.getElementById('data_evento').value,
+    area_m2: document.getElementById('area_m2').value || 0,
+    tipo_area: document.getElementById('tipo_area').value,
+    observacoes: document.getElementById('observacoes').value || '',
     r4a: document.getElementById('r4a').value || 0,
     r4b: document.getElementById('r4b').value || 0,
     r6a: document.getElementById('r6a').value || 0,
@@ -147,18 +167,27 @@ function enviarDados() {
     agentes: document.getElementById('agentes').value || 0,
     horas_agentes: document.getElementById('horas_agentes').value || 0,
     carro_qtd: document.getElementById('carro_qtd').value || 0,
-    carro_horas: document.getElementById('carro_horas').value || 0
+    carro_horas: document.getElementById('carro_horas').value || 0,
+    moto_qtd: 0,
+    moto_horas: 0,
+    balizador_cilindrico: 0,
+    balizador_conico: 0,
+    barreira_pantografica: 0,
+    barreira_plastica: 0,
+    pilarete: 0,
+    placa_1m2: 0,
+    r25a: 0,
+    r25b: 0,
+    r3: 0
   };
   
   var resultado = document.getElementById('resultado');
   resultado.style.display = 'none';
   
-  // Método que SEMPRE funciona (sem CORS)
   var form = document.createElement('form');
   form.method = 'GET';
   form.action = 'https://script.google.com/macros/s/AKfycbwthR3TocBv_VtsZVlJdVbPJZh5B-fbT6dmsEskJBDy9Y69KCwFwm5JUW0py1dS0nqQdA/exec';
   
-  // Adicionar parâmetros
   for (var key in dados) {
     var input = document.createElement('input');
     input.type = 'hidden';
@@ -167,7 +196,6 @@ function enviarDados() {
     form.appendChild(input);
   }
   
-  // Adicionar campo de ação
   var acaoInput = document.createElement('input');
   acaoInput.type = 'hidden';
   acaoInput.name = 'acao';
@@ -177,19 +205,17 @@ function enviarDados() {
   document.body.appendChild(form);
   form.submit();
   
-  // Mostrar mensagem
   resultado.innerHTML = '<div class="sucesso"><h3>✅ DADOS ENVIADOS!</h3><p>Verifique sua planilha Google.</p><p><a href="https://docs.google.com/spreadsheets/d/1OLBd15n1dKoPWmUkHTZOJT7Rh4OG5WYvgCUAgAUW5jQ/edit" target="_blank">📊 Abrir Planilha</a></p></div>';
   resultado.style.display = 'block';
   
-  // Limpar formulário após 3 segundos
   setTimeout(function() {
-    document.getElementById('protocolo').value = 'EV-2024-002';
+    document.getElementById('protocolo').value = 'EV-2024-' + (parseInt(document.getElementById('protocolo').value.split('-')[2]) + 1).toString().padStart(3, '0');
     document.getElementById('evento').value = '';
     document.getElementById('local').value = '';
+    document.getElementById('observacoes').value = '';
   }, 3000);
 }
 
-// Configurar data atual
 window.onload = function() {
   var hoje = new Date().toISOString().split('T')[0];
   document.getElementById('data_evento').value = hoje;
