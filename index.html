@@ -2,517 +2,331 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Sistema de Cálculo de Custo de Sinalização</title>
+<title>Registro de Eventos com Cálculos</title>
 <style>
   body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
     padding: 20px;
-    min-height: 100vh;
+    margin: 0;
   }
   
   .container {
-    max-width: 1000px;
+    max-width: 800px;
     margin: 0 auto;
     background: white;
-    border-radius: 15px;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.2);
-    overflow: hidden;
-  }
-  
-  .header {
-    background: linear-gradient(135deg, #2575fc 0%, #1a5fd8 100%);
-    color: white;
-    padding: 25px 30px;
-    text-align: center;
-  }
-  
-  .header h1 {
-    margin: 0;
-    font-size: 28px;
-    font-weight: 600;
-  }
-  
-  .header p {
-    margin: 10px 0 0;
-    opacity: 0.9;
-    font-size: 16px;
-  }
-  
-  .form-container {
     padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   }
   
-  .section {
-    margin-bottom: 35px;
-    border-left: 5px solid #2575fc;
-    padding-left: 20px;
-    background: #f8f9ff;
-    border-radius: 0 10px 10px 0;
-    padding: 20px;
+  h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #4CAF50;
+    padding-bottom: 10px;
   }
   
-  .section-title {
-    color: #2575fc;
-    margin-top: 0;
-    margin-bottom: 25px;
-    font-size: 20px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+  h2 {
+    color: #4CAF50;
+    margin-top: 25px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eee;
   }
   
   .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
   }
   
-  .form-group label {
+  label {
     display: block;
-    margin-bottom: 8px;
-    color: #333;
-    font-weight: 500;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+  }
+  
+  input, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
     font-size: 14px;
   }
   
-  .form-group input,
-  .form-group select {
-    width: 100%;
-    padding: 12px 15px;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 15px;
-    transition: all 0.3s;
-    box-sizing: border-box;
-  }
-  
-  .form-group input:focus,
-  .form-group select:focus {
+  input:focus, select:focus {
     outline: none;
-    border-color: #2575fc;
-    box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.1);
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
   }
   
-  .material-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  .row {
+    display: flex;
     gap: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .row .form-group {
+    flex: 1;
+  }
+  
+  .materials-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 10px;
   }
   
   .material-item {
-    background: white;
-    border: 2px solid #e8eaf6;
-    border-radius: 10px;
-    padding: 15px;
-    transition: all 0.3s;
+    background: #f9f9f9;
+    padding: 12px;
+    border-radius: 6px;
+    border-left: 4px solid #4CAF50;
   }
   
-  .material-item:hover {
-    border-color: #2575fc;
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(37, 117, 252, 0.1);
+  .material-item label {
+    font-size: 13px;
+    margin-bottom: 8px;
   }
   
-  .counter {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 10px;
-  }
-  
-  .counter button {
-    width: 40px;
-    height: 40px;
-    border: none;
-    background: #2575fc;
-    color: white;
-    border-radius: 8px;
-    font-size: 18px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s;
-  }
-  
-  .counter button:hover {
-    background: #1a5fd8;
-  }
-  
-  .counter input {
-    flex: 1;
-    text-align: center;
-    font-weight: 600;
-    font-size: 16px;
-  }
-  
-  .btn-submit {
-    display: block;
+  button {
     width: 100%;
-    padding: 18px;
-    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    padding: 15px;
+    background: #4CAF50;
     color: white;
     border: none;
-    border-radius: 10px;
-    font-size: 18px;
-    font-weight: 600;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s;
     margin-top: 30px;
+    transition: background 0.3s;
   }
   
-  .btn-submit:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(106, 17, 203, 0.3);
+  button:hover {
+    background: #45a049;
   }
   
-  .btn-submit:disabled {
-    background: #ccc;
+  button:disabled {
+    background: #cccccc;
     cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
   }
   
   #mensagem {
-    margin-top: 25px;
-    padding: 20px;
-    border-radius: 10px;
-    display: none;
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
     text-align: center;
+    display: none;
+    font-weight: bold;
   }
   
   .sucesso {
-    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    background: #d4edda;
     color: #155724;
-    border: 2px solid #155724;
+    border: 1px solid #c3e6cb;
   }
   
   .erro {
-    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    background: #f8d7da;
     color: #721c24;
-    border: 2px solid #721c24;
+    border: 1px solid #f5c6cb;
   }
   
-  .info {
-    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-    color: #1565c0;
-    border: 2px solid #1565c0;
-  }
-  
-  .link-planilha {
+  .link {
     display: inline-block;
-    margin-top: 15px;
-    padding: 12px 25px;
-    background: #34a853;
+    margin-top: 10px;
+    padding: 8px 15px;
+    background: #2196F3;
     color: white;
     text-decoration: none;
-    border-radius: 8px;
-    font-weight: 600;
-    transition: all 0.3s;
-  }
-  
-  .link-planilha:hover {
-    background: #2e8b47;
-    transform: translateY(-2px);
-  }
-  
-  .status {
+    border-radius: 4px;
     font-size: 14px;
-    padding: 8px 12px;
-    border-radius: 6px;
-    background: #f0f7ff;
-    margin-top: 10px;
-    color: #2575fc;
   }
   
-  .loading {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #2575fc;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-right: 10px;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  .link:hover {
+    background: #0b7dda;
   }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="header">
-    <h1>📋 SISTEMA DE CÁLCULO DE CUSTO DE SINALIZAÇÃO</h1>
-    <p>Preencha os dados abaixo para gerar automaticamente a planilha de custos</p>
-  </div>
+  <h1>📊 Sistema de Cálculo de Eventos</h1>
   
-  <div class="form-container">
-    <form id="formEvento">
-      
-      <!-- DADOS DO EVENTO -->
-      <div class="section">
-        <h2 class="section-title">📄 DADOS DO EVENTO</h2>
-        <div class="grid">
-          <div class="form-group">
-            <label>🔖 Protocolo *</label>
-            <input type="text" name="protocolo" required placeholder="Ex: EV-2024-001" id="protocolo">
-          </div>
-          <div class="form-group">
-            <label>📅 Data do Evento *</label>
-            <input type="date" name="data_evento" required id="data_evento">
-          </div>
-          <div class="form-group">
-            <label>🏷️ Nome do Evento *</label>
-            <input type="text" name="evento" required placeholder="Nome completo do evento">
-          </div>
-          <div class="form-group">
-            <label>📍 Local do Evento *</label>
-            <input type="text" name="local" required placeholder="Endereço completo">
-          </div>
-        </div>
+  <form id="formEvento">
+    
+    <h2>📄 Dados do Evento</h2>
+    <div class="row">
+      <div class="form-group">
+        <label>Protocolo *</label>
+        <input type="text" name="protocolo" required id="protocolo" placeholder="EV-2024-001">
       </div>
-      
-      <!-- PLACAS DE SINALIZAÇÃO -->
-      <div class="section">
-        <h2 class="section-title">🛠️ PLACAS DE SINALIZAÇÃO</h2>
-        <div class="material-grid">
-          <div class="material-item">
-            <label>Placa R-4a</label>
-            <div class="counter">
-              <button type="button" class="btn-decrement" data-field="r4a">-</button>
-              <input type="number" name="r4a" min="0" value="0">
-              <button type="button" class="btn-increment" data-field="r4a">+</button>
-            </div>
-          </div>
-          <div class="material-item">
-            <label>Placa R-4b</label>
-            <div class="counter">
-              <button type="button" class="btn-decrement" data-field="r4b">-</button>
-              <input type="number" name="r4b" min="0" value="0">
-              <button type="button" class="btn-increment" data-field="r4b">+</button>
-            </div>
-          </div>
-          <div class="material-item">
-            <label>Placa R-6a</label>
-            <div class="counter">
-              <button type="button" class="btn-decrement" data-field="r6a">-</button>
-              <input type="number" name="r6a" min="0" value="0">
-              <button type="button" class="btn-increment" data-field="r6a">+</button>
-            </div>
-          </div>
-          <div class="material-item">
-            <label>Placa R-6c</label>
-            <div class="counter">
-              <button type="button" class="btn-decrement" data-field="r6c">-</button>
-              <input type="number" name="r6c" min="0" value="0">
-              <button type="button" class="btn-increment" data-field="r6c">+</button>
-            </div>
-          </div>
-          <div class="material-item">
-            <label>Placa R-25a</label>
-            <div class="counter">
-              <button type="button" class="btn-decrement" data-field="r25a">-</button>
-              <input type="number" name="r25a" min="0" value="0">
-              <button type="button" class="btn-increment" data-field="r25a">+</button>
-            </div>
-          </div>
-          <div class="material-item">
-            <label>Placa R-25b</label>
-            <div class="counter">
-              <button type="button" class="btn-decrement" data-field="r25b">-</button>
-              <input type="number" name="r25b" min="0" value="0">
-              <button type="button" class="btn-increment" data-field="r25b">+</button>
-            </div>
-          </div>
-          <div class="material-item">
-            <label>Placa R-3</label>
-            <div class="counter">
-              <button type="button" class="btn-decrement" data-field="r3">-</button>
-              <input type="number" name="r3" min="0" value="0">
-              <button type="button" class="btn-increment" data-field="r3">+</button>
-            </div>
-          </div>
-        </div>
+      <div class="form-group">
+        <label>Data do Evento *</label>
+        <input type="date" name="data_evento" required id="data_evento">
       </div>
-      
-      <!-- EQUIPAMENTOS -->
-      <div class="section">
-        <h2 class="section-title">🚧 EQUIPAMENTOS DE SINALIZAÇÃO</h2>
-        <div class="grid">
-          <div class="material-item">
-            <label>Cone</label>
-            <div class="counter">
-              <button type="button" class="btn-decrement" data-field="cone">-</button>
-              <input type="number" name="cone" min="0" value="0">
-              <button type="button" class="btn-increment" data-field="cone">+</button>
-            </div>
-          </div>
-          <div class="material-item">
-            <label>Cavalete</label>
-            <div class="counter">
-              <button type="button" class="btn-decrement" data-field="cavalete">-</button>
-              <input type="number" name="cavalete" min="0" value="0">
-              <button type="button" class="btn-increment" data-field="cavalete">+</button>
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Fita Zebra (metros)</label>
-            <input type="number" name="fita" min="0" value="0" placeholder="Metros">
-          </div>
-          <div class="material-item">
-            <label>Barreira</label>
-            <div class="counter">
-              <button type="button" class="btn-decrement" data-field="barreira">-</button>
-              <input type="number" name="barreira" min="0" value="0">
-              <button type="button" class="btn-increment" data-field="barreira">+</button>
-            </div>
-          </div>
-        </div>
+    </div>
+    
+    <div class="form-group">
+      <label>Nome do Evento *</label>
+      <input type="text" name="evento" required placeholder="Nome completo">
+    </div>
+    
+    <div class="form-group">
+      <label>Local *</label>
+      <input type="text" name="local" required placeholder="Local do evento">
+    </div>
+    
+    <h2>🛠️ Materiais de Sinalização</h2>
+    <div class="materials-grid">
+      <div class="material-item">
+        <label>Placa R-4a</label>
+        <input type="number" name="r4a" min="0" value="0">
       </div>
-      
-      <!-- EQUIPAMENTOS ESPECIAIS -->
-      <div class="section">
-        <h2 class="section-title">📟 EQUIPAMENTOS ESPECIAIS</h2>
-        <div class="grid">
-          <div class="form-group">
-            <label>PMV - Painel Mensagem Variável (horas)</label>
-            <input type="number" name="pmv" min="0" value="0" step="0.5" placeholder="Horas">
-          </div>
-          <div class="material-item">
-            <label>Placa de Sinalização (1m²)</label>
-            <div class="counter">
-              <button type="button" class="btn-decrement" data-field="placa_1m2">-</button>
-              <input type="number" name="placa_1m2" min="0" value="0">
-              <button type="button" class="btn-increment" data-field="placa_1m2">+</button>
-            </div>
-          </div>
-        </div>
+      <div class="material-item">
+        <label>Placa R-4b</label>
+        <input type="number" name="r4b" min="0" value="0">
       </div>
-      
-      <!-- RECURSOS HUMANOS -->
-      <div class="section">
-        <h2 class="section-title">👥 RECURSOS HUMANOS</h2>
-        <div class="grid">
-          <div class="material-item">
-            <label>Quantidade de Agentes</label>
-            <div class="counter">
-              <button type="button" class="btn-decrement" data-field="agentes">-</button>
-              <input type="number" name="agentes" min="0" value="0">
-              <button type="button" class="btn-increment" data-field="agentes">+</button>
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Horas de Atuação</label>
-            <input type="number" name="horas_agentes" min="0" value="0" step="0.5" placeholder="Horas">
-          </div>
-        </div>
+      <div class="material-item">
+        <label>Placa R-6a</label>
+        <input type="number" name="r6a" min="0" value="0">
       </div>
-      
-      <!-- VEÍCULOS -->
-      <div class="section">
-        <h2 class="section-title">🚗 VEÍCULOS</h2>
-        <div class="grid">
-          <div class="material-item">
-            <label>Carro (Pickup) - Quantidade</label>
-            <div class="counter">
-              <button type="button" class="btn-decrement" data-field="carro_qtd">-</button>
-              <input type="number" name="carro_qtd" min="0" value="0">
-              <button type="button" class="btn-increment" data-field="carro_qtd">+</button>
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Horas de Uso - Carro</label>
-            <input type="number" name="carro_horas" min="0" value="0" step="0.5" placeholder="Horas">
-          </div>
-          <div class="material-item">
-            <label>Moto - Quantidade</label>
-            <div class="counter">
-              <button type="button" class="btn-decrement" data-field="moto_qtd">-</button>
-              <input type="number" name="moto_qtd" min="0" value="0">
-              <button type="button" class="btn-increment" data-field="moto_qtd">+</button>
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Horas de Uso - Moto</label>
-            <input type="number" name="moto_horas" min="0" value="0" step="0.5" placeholder="Horas">
-          </div>
-        </div>
+      <div class="material-item">
+        <label>Placa R-6c</label>
+        <input type="number" name="r6c" min="0" value="0">
       </div>
-      
-      <!-- LOTAÇÃO -->
-      <div class="section">
-        <h2 class="section-title">📏 CÁLCULO DE LOTAÇÃO</h2>
-        <div class="grid">
-          <div class="form-group">
-            <label>Área do Evento (m²)</label>
-            <input type="number" name="area_m2" min="0" value="0" step="0.01" placeholder="m²">
-          </div>
-          <div class="form-group">
-            <label>Tipo de Área</label>
-            <select name="tipo_area">
-              <option value="externa">Área Externa/Descoberta</option>
-              <option value="interna">Área Interna/Coberta</option>
-            </select>
-          </div>
-        </div>
+      <div class="material-item">
+        <label>Placa R-25a</label>
+        <input type="number" name="r25a" min="0" value="0">
       </div>
-      
-      <!-- BOTÃO ENVIAR -->
-      <button type="submit" class="btn-submit" id="btnEnviar">
-        <span id="btnText">📤 GERAR PLANILHA DE CUSTOS</span>
-        <span class="loading" id="loading" style="display:none;"></span>
-      </button>
-      
-      <!-- MENSAGEM -->
-      <div id="mensagem"></div>
-      
-      <!-- STATUS -->
-      <div class="status" id="status">
-        🔄 Aguardando envio...
+      <div class="material-item">
+        <label>Placa R-25b</label>
+        <input type="number" name="r25b" min="0" value="0">
       </div>
-    </form>
-  </div>
+      <div class="material-item">
+        <label>Placa R-3</label>
+        <input type="number" name="r3" min="0" value="0">
+      </div>
+      <div class="material-item">
+        <label>Cone</label>
+        <input type="number" name="cone" min="0" value="0">
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="form-group">
+        <label>Cavalete</label>
+        <input type="number" name="cavalete" min="0" value="0">
+      </div>
+      <div class="form-group">
+        <label>Fita Zebra (metros)</label>
+        <input type="number" name="fita" min="0" value="0" step="0.5">
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="form-group">
+        <label>Barreira Pantográfica</label>
+        <input type="number" name="barreira_pantografica" min="0" value="0">
+      </div>
+      <div class="form-group">
+        <label>Barreira Plástica</label>
+        <input type="number" name="barreira_plastica" min="0" value="0">
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="form-group">
+        <label>Balizador Cônico</label>
+        <input type="number" name="balizador_conico" min="0" value="0">
+      </div>
+      <div class="form-group">
+        <label>Pilarete para Fixação</label>
+        <input type="number" name="pilarete" min="0" value="0">
+      </div>
+    </div>
+    
+    <h2>📟 Equipamentos Especiais</h2>
+    <div class="row">
+      <div class="form-group">
+        <label>PMV (Painel Mensagem Variável) - horas</label>
+        <input type="number" name="pmv" min="0" value="0" step="0.5">
+      </div>
+      <div class="form-group">
+        <label>Placa de Sinalização (1m²)</label>
+        <input type="number" name="placa_1m2" min="0" value="0">
+      </div>
+    </div>
+    
+    <h2>👥 Recursos Humanos</h2>
+    <div class="row">
+      <div class="form-group">
+        <label>Quantidade de Agentes</label>
+        <input type="number" name="agentes" min="0" value="0">
+      </div>
+      <div class="form-group">
+        <label>Horas de Atuação</label>
+        <input type="number" name="horas_agentes" min="0" value="0" step="0.5">
+      </div>
+    </div>
+    
+    <h2>🚗 Veículos</h2>
+    <div class="row">
+      <div class="form-group">
+        <label>Carro (Pickup) - Quantidade</label>
+        <input type="number" name="carro_qtd" min="0" value="0">
+      </div>
+      <div class="form-group">
+        <label>Horas de Uso - Carro</label>
+        <input type="number" name="carro_horas" min="0" value="0" step="0.5">
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="form-group">
+        <label>Moto - Quantidade</label>
+        <input type="number" name="moto_qtd" min="0" value="0">
+      </div>
+      <div class="form-group">
+        <label>Horas de Uso - Moto</label>
+        <input type="number" name="moto_horas" min="0" value="0" step="0.5">
+      </div>
+    </div>
+    
+    <h2>📏 Cálculo de Lotação</h2>
+    <div class="row">
+      <div class="form-group">
+        <label>Área do Evento (m²)</label>
+        <input type="number" name="area_m2" min="0" value="0" step="0.01">
+      </div>
+      <div class="form-group">
+        <label>Tipo de Área</label>
+        <select name="tipo_area">
+          <option value="externa">Área Externa/Descoberta</option>
+          <option value="interna">Área Interna/Coberta</option>
+        </select>
+      </div>
+    </div>
+    
+    <button type="submit" id="btnEnviar">📤 Gerar Planilha com Cálculos</button>
+    
+    <div id="mensagem"></div>
+  </form>
 </div>
 
 <script>
-const URL = "https://script.google.com/macros/s/AKfycbycSOsVoN_kxRsP2xVBHsIhGIvT0a6cczRsTpog1VwXv7I0BtR3asZQAXRf4FuUICri7g/exec";
-document.querySelectorAll('.btn-increment').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const field = btn.getAttribute('data-field');
-    const input = document.querySelector(`input[name="${field}"]`);
-    input.value = parseInt(input.value) + 1;
-    input.dispatchEvent(new Event('change'));
-  });
-});
+// SUA URL
+const URL = "https://script.google.com/macros/s/AKfycbwthR3TocBv_VtsZVlJdVbPJZh5B-fbT6dmsEskJBDy9Y69KCwFwm5JUW0py1dS0nqQdA/exec";
 
-document.querySelectorAll('.btn-decrement').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const field = btn.getAttribute('data-field');
-    const input = document.querySelector(`input[name="${field}"]`);
-    if (parseInt(input.value) > 0) {
-      input.value = parseInt(input.value) - 1;
-      input.dispatchEvent(new Event('change'));
-    }
-  });
-});
-
-// Configurar data atual
+// Configuração inicial
 window.addEventListener('load', () => {
+  // Data atual
   const hoje = new Date().toISOString().split('T')[0];
   document.getElementById('data_evento').value = hoje;
   
-  // Gerar protocolo automático se vazio
+  // Protocolo automático
   const protocoloInput = document.getElementById('protocolo');
   if (!protocoloInput.value) {
     const ano = new Date().getFullYear();
@@ -520,15 +334,125 @@ window.addEventListener('load', () => {
     const dia = new Date().getDate().toString().padStart(2, '0');
     protocoloInput.value = `EV-${ano}${mes}${dia}-001`;
   }
-  
-  // Testar conexão inicial
-  testarConexao();
 });
 
-// Testar conexão com o servidor
-async function testarConexao() {
-  const status = document.getElementById('status');
-  status.innerHTML = '🔄 Testando conexão...';
+// Envio do formulário
+document.getElementById("formEvento").addEventListener("submit", async (e) => {
+  e.preventDefault();
   
+  const form = e.target;
+  const mensagem = document.getElementById("mensagem");
+  const btnEnviar = document.getElementById("btnEnviar");
+  const textoOriginal = btnEnviar.textContent;
+  
+  btnEnviar.textContent = "⏳ Gerando planilha...";
+  btnEnviar.disabled = true;
+  mensagem.style.display = "none";
+
+  // Coletar todos os dados
+  const dados = {
+    // Dados principais
+    protocolo: form.protocolo.value,
+    evento: form.evento.value,
+    local: form.local.value,
+    data_evento: form.data_evento.value,
+    
+    // Placas
+    r4a: parseInt(form.r4a.value) || 0,
+    r4b: parseInt(form.r4b.value) || 0,
+    r6a: parseInt(form.r6a.value) || 0,
+    r6c: parseInt(form.r6c.value) || 0,
+    r25a: parseInt(form.r25a.value) || 0,
+    r25b: parseInt(form.r25b.value) || 0,
+    r3: parseInt(form.r3.value) || 0,
+    
+    // Equipamentos
+    cone: parseInt(form.cone.value) || 0,
+    cavalete: parseInt(form.cavalete.value) || 0,
+    fita: parseFloat(form.fita.value) || 0,
+    barreira_pantografica: parseInt(form.barreira_pantografica.value) || 0,
+    barreira_plastica: parseInt(form.barreira_plastica.value) || 0,
+    balizador_conico: parseInt(form.balizador_conico.value) || 0,
+    pilarete: parseInt(form.pilarete.value) || 0,
+    pmv: parseFloat(form.pmv.value) || 0,
+    placa_1m2: parseInt(form.placa_1m2.value) || 0,
+    
+    // Recursos
+    agentes: parseInt(form.agentes.value) || 0,
+    horas_agentes: parseFloat(form.horas_agentes.value) || 0,
+    
+    // Veículos
+    carro_qtd: parseInt(form.carro_qtd.value) || 0,
+    carro_horas: parseFloat(form.carro_horas.value) || 0,
+    moto_qtd: parseInt(form.moto_qtd.value) || 0,
+    moto_horas: parseFloat(form.moto_horas.value) || 0,
+    
+    // Lotação
+    area_m2: parseFloat(form.area_m2.value) || 0,
+    tipo_area: form.tipo_area.value
+  };
+
   try {
-    const response = await fetch(URL);
+    console.log("Enviando dados:", dados);
+    
+    const response = await fetch(URL, {
+      method: 'POST',
+      body: JSON.stringify(dados),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const resultado = await response.json();
+    console.log("Resposta:", resultado);
+    
+    if (resultado.status === "sucesso") {
+      mensagem.innerHTML = `
+        <div class="sucesso">
+          <h3>✅ PLANILHA GERADA COM SUCESSO!</h3>
+          <p><strong>Protocolo:</strong> ${resultado.protocolo}</p>
+          <p><strong>Aba criada:</strong> ${resultado.aba}</p>
+          <p>Os cálculos de VALOR UNITÁRIO, VALOR PARCIAL e 5% foram aplicados automaticamente.</p>
+          <a href="${resultado.link}" target="_blank" class="link">
+            📊 ABRIR PLANILHA COMPLETA
+          </a>
+        </div>
+      `;
+      mensagem.style.display = "block";
+      
+      // Atualizar protocolo para próximo
+      const protocoloAtual = dados.protocolo;
+      if (protocoloAtual.match(/(\d+)$/)) {
+        const num = parseInt(protocoloAtual.match(/(\d+)$/)[1]);
+        form.protocolo.value = protocoloAtual.replace(/\d+$/, (num + 1).toString().padStart(3, '0'));
+      }
+      
+      // Limpar outros campos
+      form.evento.value = '';
+      form.local.value = '';
+      form.area_m2.value = '';
+      
+    } else {
+      throw new Error(resultado.mensagem);
+    }
+
+  } catch (err) {
+    console.error("Erro:", err);
+    mensagem.innerHTML = `
+      <div class="erro">
+        <h3>❌ ERRO</h3>
+        <p>${err.message}</p>
+        <p>Tente novamente ou verifique a planilha.</p>
+      </div>
+    `;
+    mensagem.style.display = "block";
+    
+  } finally {
+    btnEnviar.textContent = textoOriginal;
+    btnEnviar.disabled = false;
+  }
+});
+</script>
+
+</body>
+</html>
