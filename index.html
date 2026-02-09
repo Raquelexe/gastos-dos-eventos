@@ -1,176 +1,241 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Teste de Conexão</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 40px;
-      text-align: center;
-    }
-    button {
-      padding: 15px 30px;
-      font-size: 18px;
-      background: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      margin: 10px;
-    }
-    button:hover {
-      background: #45a049;
-    }
-    #resultado {
-      margin-top: 30px;
-      padding: 20px;
-      border-radius: 5px;
-      display: none;
-    }
-    .sucesso {
-      background: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
-    }
-    .erro {
-      background: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
-    }
-    #url {
-      width: 80%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 2px solid #ddd;
-      border-radius: 4px;
-      font-family: monospace;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Sistema de Registro</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  padding: 20px;
+}
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+}
+.form-group {
+  margin-bottom: 20px;
+}
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+input, select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+}
+button {
+  width: 100%;
+  padding: 15px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+}
+button:hover {
+  background: #45a049;
+}
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+#mensagem {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 5px;
+  display: none;
+  text-align: center;
+}
+.sucesso {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+.erro {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+.row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+.row > div {
+  flex: 1;
+}
+.link {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 15px;
+  background: #2196F3;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+}
+</style>
 </head>
 <body>
+
+<div class="container">
+  <h1>Registro de Eventos</h1>
   
-  <h1>🔧 Teste de Conexão Google Apps Script</h1>
-  
-  <p>Cole a URL do seu Google Apps Script:</p>
-  <input type="text" id="url" placeholder="https://script.google.com/macros/s/.../exec">
-  
-  <div>
-    <button onclick="testarGET()">Testar Conexão (GET)</button>
-    <button onclick="testarPOST()">Testar Envio (POST)</button>
-  </div>
-  
-  <div id="resultado"></div>
-  
-  <script>
-    // Cole sua URL aqui
-    const URL_PADRAO = "https://script.google.com/macros/s/AKfycbwthR3TocBv_VtsZVlJdVbPJZh5B-fbT6dmsEskJBDy9Y69KCwFwm5JUW0py1dS0nqQdA/exec";
+  <form id="formEvento">
     
-    // Inicializar com URL padrão
-    document.getElementById('url').value = URL_PADRAO;
+    <div class="form-group">
+      <label>Protocolo *</label>
+      <input type="text" name="protocolo" required id="protocolo" value="TESTE-001">
+    </div>
     
-    function getURL() {
-      const urlInput = document.getElementById('url').value;
-      return urlInput || URL_PADRAO;
-    }
+    <div class="row">
+      <div class="form-group">
+        <label>Data do Evento *</label>
+        <input type="date" name="data_evento" required id="data_evento">
+      </div>
+      <div class="form-group">
+        <label>Agentes</label>
+        <input type="number" name="agentes" min="0" value="2">
+      </div>
+    </div>
     
-    async function testarGET() {
-      const resultado = document.getElementById('resultado');
-      resultado.style.display = 'none';
+    <div class="form-group">
+      <label>Nome do Evento *</label>
+      <input type="text" name="evento" required value="Evento Teste">
+    </div>
+    
+    <div class="form-group">
+      <label>Local *</label>
+      <input type="text" name="local" required value="Local Teste">
+    </div>
+    
+    <div class="row">
+      <div class="form-group">
+        <label>Placa R-4a</label>
+        <input type="number" name="r4a" min="0" value="3">
+      </div>
+      <div class="form-group">
+        <label>Placa R-4b</label>
+        <input type="number" name="r4b" min="0" value="2">
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="form-group">
+        <label>Cone</label>
+        <input type="number" name="cone" min="0" value="10">
+      </div>
+      <div class="form-group">
+        <label>Cavalete</label>
+        <input type="number" name="cavalete" min="0" value="5">
+      </div>
+    </div>
+    
+    <button type="submit" id="btnEnviar">ENVIAR PARA PLANILHA</button>
+    
+    <div id="mensagem"></div>
+  </form>
+</div>
+
+<script>
+const URL = "https://script.google.com/macros/s/AKfycbxP5-GxH9BPzwz39ylwTFe49gphmxzENSzmVM9b35J3DPK8GArIkjoLtvPnUeoTBJTpXA/exec";
+
+window.addEventListener('load', () => {
+  const hoje = new Date().toISOString().split('T')[0];
+  document.getElementById('data_evento').value = hoje;
+});
+
+document.getElementById("formEvento").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  
+  const form = e.target;
+  const mensagem = document.getElementById("mensagem");
+  const btnEnviar = document.getElementById("btnEnviar");
+  const textoOriginal = btnEnviar.textContent;
+  
+  btnEnviar.textContent = "Enviando...";
+  btnEnviar.disabled = true;
+  mensagem.style.display = "none";
+
+  const dados = {
+    protocolo: form.protocolo.value,
+    evento: form.evento.value,
+    local: form.local.value,
+    data_evento: form.data_evento.value,
+    agentes: form.agentes.value || 0,
+    r4a: form.r4a.value || 0,
+    r4b: form.r4b.value || 0,
+    cone: form.cone.value || 0,
+    cavalete: form.cavalete.value || 0
+  };
+
+  try {
+    const response = await fetch(URL, {
+      method: 'POST',
+      body: JSON.stringify(dados),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const resultado = await response.json();
+    
+    if (resultado.status === "sucesso") {
+      mensagem.innerHTML = `
+        <div class="sucesso">
+          <h3>✅ DADOS SALVOS!</h3>
+          <p>Protocolo: ${resultado.protocolo}</p>
+          <p>Linha: ${resultado.linha}</p>
+          <a href="https://docs.google.com/spreadsheets/d/1TGuHgHmnOLNM4sg-saCrn94As_4CBwCRIc7rjd7xOF0/edit" 
+             target="_blank" class="link">
+            VER PLANILHA
+          </a>
+        </div>
+      `;
+      mensagem.style.display = "block";
       
-      try {
-        const url = getURL();
-        console.log("Testando GET para:", url);
-        
-        const response = await fetch(url);
-        const data = await response.json();
-        
-        resultado.innerHTML = `
-          <div class="sucesso">
-            <h3>✅ CONEXÃO BEM SUCEDIDA!</h3>
-            <p><strong>Status:</strong> ${data.status}</p>
-            <p><strong>Mensagem:</strong> ${data.mensagem}</p>
-            <p><strong>Hora:</strong> ${data.hora}</p>
-            <p>O servidor está respondendo corretamente.</p>
-          </div>
-        `;
-        resultado.style.display = 'block';
-        
-      } catch (erro) {
-        resultado.innerHTML = `
-          <div class="erro">
-            <h3>❌ FALHA NA CONEXÃO</h3>
-            <p><strong>Erro:</strong> ${erro.message}</p>
-            <p><strong>Possíveis causas:</strong></p>
-            <ul>
-              <li>URL incorreta</li>
-              <li>Script não implantado como "Aplicativo Web"</li>
-              <li>Acesso não configurado como "Qualquer pessoa"</li>
-              <li>Problema de CORS no navegador</li>
-            </ul>
-          </div>
-        `;
-        resultado.style.display = 'block';
+      const protocoloAtual = dados.protocolo;
+      if (protocoloAtual.match(/(\d+)$/)) {
+        const num = parseInt(protocoloAtual.match(/(\d+)$/)[1]);
+        form.protocolo.value = protocoloAtual.replace(/\d+$/, (num + 1).toString().padStart(3, '0'));
       }
-    }
-    
-    async function testarPOST() {
-      const resultado = document.getElementById('resultado');
-      resultado.style.display = 'none';
       
-      try {
-        const url = getURL();
-        console.log("Testando POST para:", url);
-        
-        const dados = {
-          protocolo: "TESTE-" + Date.now(),
-          evento: "Evento de Teste",
-          local: "Local de Teste",
-          data_evento: new Date().toISOString().split('T')[0]
-        };
-        
-        const response = await fetch(url, {
-          method: 'POST',
-          body: JSON.stringify(dados),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        
-        const data = await response.json();
-        
-        resultado.innerHTML = `
-          <div class="sucesso">
-            <h3>✅ ENVIO BEM SUCEDIDO!</h3>
-            <p><strong>Status:</strong> ${data.status}</p>
-            <p><strong>Mensagem:</strong> ${data.mensagem}</p>
-            <p><strong>Protocolo:</strong> ${data.protocolo}</p>
-            <p><strong>Linha salva:</strong> ${data.linha}</p>
-            <p>Verifique a aba "TESTE" na sua planilha.</p>
-          </div>
-        `;
-        resultado.style.display = 'block';
-        
-      } catch (erro) {
-        resultado.innerHTML = `
-          <div class="erro">
-            <h3>❌ FALHA NO ENVIO</h3>
-            <p><strong>Erro:</strong> ${erro.message}</p>
-            <p><strong>Detalhes:</strong> ${erro.stack}</p>
-            <p>Tente primeiro o teste GET acima.</p>
-          </div>
-        `;
-        resultado.style.display = 'block';
-      }
+    } else {
+      throw new Error(resultado.mensagem);
     }
-  </script>
-  
-  <p style="margin-top: 50px; font-size: 14px; color: #666;">
-    Instruções:<br>
-    1. Cole sua URL do Google Apps Script no campo acima<br>
-    2. Clique em "Testar Conexão (GET)" primeiro<br>
-    3. Se funcionar, clique em "Testar Envio (POST)"<br>
-    4. Verifique sua planilha Google - deve aparecer uma aba "TESTE"
-  </p>
+
+  } catch (err) {
+    mensagem.innerHTML = `
+      <div class="erro">
+        <h3>❌ ERRO</h3>
+        <p>${err.message}</p>
+      </div>
+    `;
+    mensagem.style.display = "block";
+    
+  } finally {
+    btnEnviar.textContent = textoOriginal;
+    btnEnviar.disabled = false;
+  }
+});
+</script>
+
 </body>
 </html>
