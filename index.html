@@ -22,6 +22,7 @@ button:hover { background: #45a049; }
 .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
 .item-group { background: #fff; padding: 10px; border-radius: 4px; border: 1px solid #eee; }
+.pmv-section { background: #e8f4fd; padding: 15px; border-radius: 4px; border: 1px solid #1976d2; }
 </style>
 </head>
 <body>
@@ -31,13 +32,12 @@ button:hover { background: #45a049; }
   
   <form id="meuForm">
     
-    <!-- DADOS DO EVENTO -->
     <div class="section">
       <h2>📄 Dados do Evento</h2>
       <div class="row">
         <div class="form-group">
           <label>Protocolo:</label>
-          <input type="text" id="protocolo" value=" " required>
+          <input type="text" id="protocolo" value="EV-2024-001" required>
         </div>
         <div class="form-group">
           <label>Data do Evento:</label>
@@ -46,16 +46,16 @@ button:hover { background: #45a049; }
       </div>
       <div class="form-group">
         <label>Nome do Evento:</label>
-        <input type="text" id="evento" value=" " required>
+        <input type="text" id="evento" placeholder="Digite o nome do evento" required>
       </div>
       <div class="form-group">
         <label>Local do Evento:</label>
-        <input type="text" id="local" value=" " required>
+        <input type="text" id="local" placeholder="Digite o local do evento" required>
       </div>
       <div class="row">
         <div class="form-group">
           <label>Área do Evento (m²):</label>
-          <input type="number" id="area_m2" value="2350" min="0" step="0.1" required>
+          <input type="number" id="area_m2" value="0" min="0" step="0.1" required>
         </div>
         <div class="form-group">
           <label>Tipo de Área:</label>
@@ -67,11 +67,10 @@ button:hover { background: #45a049; }
       </div>
       <div class="form-group">
         <label>Observações (descrição do evento):</label>
-        <textarea id="observacoes" rows="3" placeholder="Descreva o evento, contexto, problemas, particularidades..." required></textarea>
+        <textarea id="observacoes" rows="3" placeholder="Descreva o evento, contexto, fase da obra, particularidades..." required></textarea>
       </div>
     </div>
 
-    <!-- SINALIZAÇÃO - ITENS DA PLANILHA -->
     <div class="section">
       <h2>🚧 Sinalização - Itens da Planilha</h2>
       
@@ -117,7 +116,7 @@ button:hover { background: #45a049; }
       <div class="grid-3">
         <div class="item-group">
           <label>Cavalete desvio à direita (M0771):</label>
-          <input type="number" id="cavalete_direita" value="2" min="0">
+          <input type="number" id="cavalete_direita" value="0" min="0">
         </div>
         <div class="item-group">
           <label>Cavalete desvio à esquerda (M0771):</label>
@@ -168,16 +167,21 @@ button:hover { background: #45a049; }
         </div>
       </div>
       
-      <h3>🖥️ Painel de Mensagem Variável (PMV)</h3>
-      <div class="row">
-        <div class="form-group">
-          <label>PMV - Quantidade de horas:</label>
-          <input type="number" id="pmv" value="0" min="0" step="0.5" required>
+      <div class="pmv-section">
+        <h3>🖥️ Painel de Mensagem Variável (PMV)</h3>
+        <div class="row">
+          <div class="form-group">
+            <label>Quantidade de PMVs:</label>
+            <input type="number" id="pmv_qtd" value="0" min="0">
+          </div>
+          <div class="form-group">
+            <label>Horas por PMV:</label>
+            <input type="number" id="pmv_horas" value="0" min="0" step="0.5">
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- RECURSOS HUMANOS E VEÍCULOS -->
     <div class="section">
       <h2>👥 Recursos Humanos e Veículos</h2>
       
@@ -185,11 +189,11 @@ button:hover { background: #45a049; }
       <div class="row">
         <div class="form-group">
           <label>Quantidade de Agentes:</label>
-          <input type="number" id="agentes" value="0" min="0" required>
+          <input type="number" id="agentes" value="0" min="0">
         </div>
         <div class="form-group">
           <label>Horas por Agente:</label>
-          <input type="number" id="horas_agentes" value="0" min="0" step="0.5" required>
+          <input type="number" id="horas_agentes" value="0" min="0" step="0.5">
         </div>
       </div>
       
@@ -233,7 +237,7 @@ function enviarDados() {
     area_m2: document.getElementById('area_m2').value || 0,
     tipo_area: document.getElementById('tipo_area').value,
     observacoes: document.getElementById('observacoes').value || '',
-  
+    
     balizador_cilindrico: document.getElementById('balizador_cilindrico').value || 0,
     balizador_conico: document.getElementById('balizador_conico').value || 0,
     barreira_pantografica: document.getElementById('barreira_pantografica').value || 0,
@@ -254,8 +258,9 @@ function enviarDados() {
     r4b: document.getElementById('r4b').value || 0,
     r6a: document.getElementById('r6a').value || 0,
     r6c: document.getElementById('r6c').value || 0,
-   
-    pmv: document.getElementById('pmv').value || 0,
+    
+    pmv_qtd: document.getElementById('pmv_qtd').value || 0,
+    pmv_horas: document.getElementById('pmv_horas').value || 0,
     
     agentes: document.getElementById('agentes').value || 0,
     horas_agentes: document.getElementById('horas_agentes').value || 0,
@@ -300,16 +305,15 @@ function enviarDados() {
     '<p><a href="https://docs.google.com/spreadsheets/d/1OLBd15n1dKoPWmUkHTZOJT7Rh4OG5WYvgCUAgAUW5jQ/edit" target="_blank">📊 Abrir Planilha Google Sheets</a></p>' +
     '<p><em>Os dados foram enviados e uma nova aba foi criada com o protocolo.</em></p></div>';
   resultado.style.display = 'block';
- 
+  
   setTimeout(function() {
     var numAtual = parseInt(document.getElementById('protocolo').value.split('-')[2]);
     var novoNum = isNaN(numAtual) ? 2 : numAtual + 1;
     document.getElementById('protocolo').value = 'EV-2024-' + novoNum.toString().padStart(3, '0');
-    
     document.getElementById('observacoes').value = '';
     document.getElementById('evento').value = '';
     document.getElementById('local').value = '';
-
+    document.getElementById('area_m2').value = '0';
     window.scrollTo(0, 0);
   }, 3000);
 }
@@ -317,11 +321,8 @@ function enviarDados() {
 window.onload = function() {
   var hoje = new Date().toISOString().split('T')[0];
   document.getElementById('data_evento').value = hoje;
-  
-  document.getElementById('observacoes').value = 'Descrição do evento, contexto, fase da obra, particularidades da sinalização necessária...';
 };
 </script>
 
 </body>
 </html>
-
