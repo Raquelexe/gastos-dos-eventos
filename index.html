@@ -302,14 +302,9 @@ async function enviarDados() {
   loading.style.display = 'block';
   
   try {
-    var url = 'https://script.google.com/macros/s/AKfycbwthR3TocBv_VtsZVlJdVbPJZh5B-fbT6dmsEskJBDy9Y69KCwFwm5JUW0py1dS0nqQdA/exec';
+    var url = 'https://script.google.com/macros/s/AKfycbyA3sEKeXz5EhfOiv31jbC-alsshVkwAlsZTSXy8QZQpm_Ym5N2mXU27KBkh-SrHwfCAw/exec?' + new URLSearchParams(dados).toString();
     
-    var formData = new URLSearchParams();
-    for (var key in dados) {
-      formData.append(key, dados[key]);
-    }
-    
-    var response = await fetch(url + '?' + formData.toString(), {
+    var response = await fetch(url, {
       method: 'GET',
       mode: 'no-cors'
     });
@@ -317,15 +312,15 @@ async function enviarDados() {
     resultado.innerHTML = '<div class="sucesso"><h3>✅ DADOS ENVIADOS COM SUCESSO!</h3>' +
       '<p>Protocolo: <strong>' + dados.protocolo + '</strong></p>' +
       '<p>Evento: <strong>' + dados.evento + '</strong></p>' +
-      '<p><a href="https://docs.google.com/spreadsheets/d/1OLBd15n1dKoPWmUkHTZOJT7Rh4OG5WYvgCUAgAUW5jQ/edit" target="_blank" style="color: #155724; font-weight: bold;">📊 ABRIR PLANILHA GOOGLE SHEETS</a></p>' +
-      '<p><em>Os dados foram salvos e uma nova aba foi criada com os cálculos automáticos.</em></p></div>';
+      '<p><a href="https://docs.google.com/spreadsheets/d/1TGuHgHmnOLNM4sg-saCrn94As_4CBwCRIc7rjd7xOF0/edit" target="_blank" style="color: #155724; font-weight: bold;">📊 ABRIR PLANILHA GOOGLE SHEETS</a></p>' +
+      '<p><em>Os dados foram salvos na planilha e uma nova aba "' + dados.protocolo + '" foi criada.</em></p></div>';
     
   } catch(error) {
     resultado.innerHTML = '<div class="sucesso"><h3>✅ DADOS ENVIADOS!</h3>' +
       '<p>Protocolo: <strong>' + dados.protocolo + '</strong></p>' +
       '<p>Evento: <strong>' + dados.evento + '</strong></p>' +
-      '<p><a href="https://docs.google.com/spreadsheets/d/1OLBd15n1dKoPWmUkHTZOJT7Rh4OG5WYvgCUAgAUW5jQ/edit" target="_blank" style="color: #155724; font-weight: bold;">📊 ABRIR PLANILHA GOOGLE SHEETS</a></p>' +
-      '<p><em>Os dados foram enviados para processamento.</em></p></div>';
+      '<p><a href="https://docs.google.com/spreadsheets/d/1TGuHgHmnOLNM4sg-saCrn94As_4CBwCRIc7rjd7xOF0/edit" target="_blank" style="color: #155724; font-weight: bold;">📊 ABRIR PLANILHA GOOGLE SHEETS</a></p>' +
+      '<p><em>Verifique a nova aba com o protocolo do evento.</em></p></div>';
   }
   
   resultado.style.display = 'block';
