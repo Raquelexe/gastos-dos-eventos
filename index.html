@@ -19,10 +19,12 @@ button { width: 100%; padding: 12px; background: #4CAF50; color: white; border: 
 button:hover { background: #45a049; }
 #resultado { margin-top: 20px; padding: 15px; border-radius: 5px; display: none; }
 .sucesso { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+.erro { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
 .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
 .item-group { background: #fff; padding: 10px; border-radius: 4px; border: 1px solid #eee; }
 .pmv-section { background: #e8f4fd; padding: 15px; border-radius: 4px; border: 1px solid #1976d2; }
+.loading { display: none; text-align: center; margin: 10px 0; }
 </style>
 </head>
 <body>
@@ -67,7 +69,7 @@ button:hover { background: #45a049; }
       </div>
       <div class="form-group">
         <label>Observações (descrição do evento):</label>
-        <textarea id="observacoes" rows="3" placeholder="Descreva o evento, problemas e etc..." required></textarea>
+        <textarea id="observacoes" rows="3" placeholder="Descreva o evento, contexto, fase da obra, particularidades..." required></textarea>
       </div>
     </div>
 
@@ -221,14 +223,15 @@ button:hover { background: #45a049; }
       </div>
     </div>
 
-    <button type="button" onclick="enviarDados()">📤 ENVIAR PARA PLANILHA GOOGLE SHEETS</button>
+    <button type="button" onclick="enviarDados()" id="btnEnviar">📤 ENVIAR PARA PLANILHA GOOGLE SHEETS</button>
+    <div class="loading" id="loading">Enviando dados... Aguarde...</div>
     
     <div id="resultado"></div>
   </form>
 </div>
 
 <script>
-function enviarDados() {
+async function enviarDados() {
   var dados = {
     protocolo: document.getElementById('protocolo').value,
     evento: document.getElementById('evento').value,
@@ -267,7 +270,9 @@ function enviarDados() {
     carro_qtd: document.getElementById('carro_qtd').value || 0,
     carro_horas: document.getElementById('carro_horas').value || 0,
     moto_qtd: document.getElementById('moto_qtd').value || 0,
-    moto_horas: document.getElementById('moto_horas').value || 0
+    moto_horas: document.getElementById('moto_horas').value || 0,
+    
+    acao: 'salvar'
   };
   
   if (!dados.protocolo || !dados.evento || !dados.local || !dados.data_evento) {
@@ -276,35 +281,48 @@ function enviarDados() {
   }
   
   var resultado = document.getElementById('resultado');
+  var btnEnviar = document.getElementById('btnEnviar');
+  var loading = document.getElementById('loading');
+  
   resultado.style.display = 'none';
+  btnEnviar.disabled = true;
+  loading.style.display = 'block';
   
-  var form = document.createElement('form');
-  form.method = 'GET';
-  form.action = 'https://script.google.com/macros/s/AKfycbxq9n1zQmX2rmX_Le4Zl4XqN0KAEljKJo6Zgwfh55cOEPUXcMoCSw1Ryimm6AwMqDILWg/exec';
-  
-  for (var key in dados) {
-    var input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = key;
-    input.value = dados[key];
-    form.appendChild(input);
+  try {
+    var url = 'https://script.google.com/macros/s/AKfycbxzEC5-zAkCc9c29P11GKo0Y-sUBknO_XGf8iJDFNn7Lm6CoKVP371ZIO96sI4ISTlbEg/exec';
+    
+    var formData = new FormData();
+    for (var key in dados) {
+      formData.append(key, dados[key]);
+    }
+    
+    var response = await fetch(url, {
+      method: 'POST',
+      body: formData
+    });
+    
+    var textoResposta = await response.text();
+    
+    if (textoResposta === 'SUCESSO') {
+      resultado.innerHTML = '<div class="sucesso"><h3>✅ DADOS ENVIADOS COM SUCESSO!</h3>' +
+        '<p>Protocolo: <strong>' + dados.protocolo + '</strong></p>' +
+        '<p>Evento: <strong>' + dados.evento + '</strong></p>' +
+        '<p><a href="https://docs.google.com/spreadsheets/d/1TGuHgHmnOLNM4sg-saCrn94As_4CBwCRIc7rjd7xOF0/edit" target="_blank">📊 Abrir Planilha Google Sheets</a></p>' +
+        '<p><em>Os dados foram salvos na planilha e uma nova aba foi criada.</em></p></div>';
+    } else {
+      resultado.innerHTML = '<div class="erro"><h3>❌ ERRO NO ENVIO</h3>' +
+        '<p>Resposta do servidor: ' + textoResposta + '</p></div>';
+    }
+    
+  } catch(error) {
+    resultado.innerHTML = '<div class="erro"><h3>❌ ERRO DE CONEXÃO</h3>' +
+      '<p>Não foi possível conectar ao servidor.</p>' +
+      '<p>Erro: ' + error.message + '</p></div>';
   }
   
-  var acaoInput = document.createElement('input');
-  acaoInput.type = 'hidden';
-  acaoInput.name = 'acao';
-  acaoInput.value = 'salvar';
-  form.appendChild(acaoInput);
-  
-  document.body.appendChild(form);
-  form.submit();
-  
-  resultado.innerHTML = '<div class="sucesso"><h3>✅ DADOS ENVIADOS COM SUCESSO!</h3>' +
-    '<p>Protocolo: <strong>' + dados.protocolo + '</strong></p>' +
-    '<p>Evento: <strong>' + dados.evento + '</strong></p>' +
-    '<p><a href="https://docs.google.com/spreadsheets/d/1OLBd15n1dKoPWmUkHTZOJT7Rh4OG5WYvgCUAgAUW5jQ/edit" target="_blank">📊 Abrir Planilha Google Sheets</a></p>' +
-    '<p><em>Os dados foram enviados e uma nova aba foi criada com o protocolo.</em></p></div>';
   resultado.style.display = 'block';
+  btnEnviar.disabled = false;
+  loading.style.display = 'none';
   
   setTimeout(function() {
     var numAtual = parseInt(document.getElementById('protocolo').value.split('-')[2]);
@@ -326,5 +344,3 @@ window.onload = function() {
 
 </body>
 </html>
-
-
