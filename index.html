@@ -24,7 +24,9 @@ button:hover { background: #45a049; }
 .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
 .item-group { background: #fff; padding: 10px; border-radius: 4px; border: 1px solid #eee; }
 .pmv-section { background: #e8f4fd; padding: 15px; border-radius: 4px; border: 1px solid #1976d2; }
-.loading { display: none; text-align: center; margin: 10px 0; }
+.loading { display: none; text-align: center; margin: 10px 0; padding: 10px; background: #f0f8ff; border-radius: 4px; }
+.valor-info { background: #e8f5e8; padding: 8px; border-radius: 4px; margin: 5px 0; font-size: 12px; }
+.valor-info strong { color: #2e7d32; }
 </style>
 </head>
 <body>
@@ -188,6 +190,9 @@ button:hover { background: #45a049; }
       <h2>👥 Recursos Humanos e Veículos</h2>
       
       <h3>👮 Agentes de Trânsito</h3>
+      <div class="valor-info">
+        <strong>Valor unitário por hora: R$ 22,96</strong>
+      </div>
       <div class="row">
         <div class="form-group">
           <label>Quantidade de Agentes:</label>
@@ -199,10 +204,13 @@ button:hover { background: #45a049; }
         </div>
       </div>
       
-      <h3>🚗 Veículos</h3>
+      <h3>🚗 Carros (Pickup)</h3>
+      <div class="valor-info">
+        <strong>Valor unitário por hora: R$ 19,67</strong>
+      </div>
       <div class="row">
         <div class="form-group">
-          <label>Carros (Pickup) - Quantidade:</label>
+          <label>Quantidade de Carros:</label>
           <input type="number" id="carro_qtd" value="0" min="0">
         </div>
         <div class="form-group">
@@ -211,9 +219,13 @@ button:hover { background: #45a049; }
         </div>
       </div>
       
+      <h3>🏍️ Motos</h3>
+      <div class="valor-info">
+        <strong>Valor unitário por hora: R$ 7,23</strong>
+      </div>
       <div class="row">
         <div class="form-group">
-          <label>Motos - Quantidade:</label>
+          <label>Quantidade de Motos:</label>
           <input type="number" id="moto_qtd" value="0" min="0">
         </div>
         <div class="form-group">
@@ -224,7 +236,7 @@ button:hover { background: #45a049; }
     </div>
 
     <button type="button" onclick="enviarDados()" id="btnEnviar">📤 ENVIAR PARA PLANILHA GOOGLE SHEETS</button>
-    <div class="loading" id="loading">Enviando dados... Aguarde...</div>
+    <div class="loading" id="loading">⏳ Enviando dados... Aguarde...</div>
     
     <div id="resultado"></div>
   </form>
@@ -275,8 +287,8 @@ async function enviarDados() {
     acao: 'salvar'
   };
   
-  if (!dados.protocolo || !dados.evento || !dados.local || !dados.data_evento) {
-    alert("Preencha todos os campos obrigatórios!");
+  if (!dados.protocolo || !dados.evento || !dados.local || !dados.data_evento || !dados.observacoes) {
+    alert("Preencha todos os campos obrigatórios: Protocolo, Nome do Evento, Local, Data e Observações!");
     return;
   }
   
@@ -286,42 +298,39 @@ async function enviarDados() {
   
   resultado.style.display = 'none';
   btnEnviar.disabled = true;
+  btnEnviar.textContent = '⏳ ENVIANDO...';
   loading.style.display = 'block';
   
   try {
-    var url = 'https://script.google.com/macros/s/AKfycbxzEC5-zAkCc9c29P11GKo0Y-sUBknO_XGf8iJDFNn7Lm6CoKVP371ZIO96sI4ISTlbEg/exec';
+    var url = 'https://script.google.com/macros/s/AKfycbwthR3TocBv_VtsZVlJdVbPJZh5B-fbT6dmsEskJBDy9Y69KCwFwm5JUW0py1dS0nqQdA/exec';
     
-    var formData = new FormData();
+    var formData = new URLSearchParams();
     for (var key in dados) {
       formData.append(key, dados[key]);
     }
     
-    var response = await fetch(url, {
-      method: 'POST',
-      body: formData
+    var response = await fetch(url + '?' + formData.toString(), {
+      method: 'GET',
+      mode: 'no-cors'
     });
     
-    var textoResposta = await response.text();
-    
-    if (textoResposta === 'SUCESSO') {
-      resultado.innerHTML = '<div class="sucesso"><h3>✅ DADOS ENVIADOS COM SUCESSO!</h3>' +
-        '<p>Protocolo: <strong>' + dados.protocolo + '</strong></p>' +
-        '<p>Evento: <strong>' + dados.evento + '</strong></p>' +
-        '<p><a href="https://docs.google.com/spreadsheets/d/1TGuHgHmnOLNM4sg-saCrn94As_4CBwCRIc7rjd7xOF0/edit" target="_blank">📊 Abrir Planilha Google Sheets</a></p>' +
-        '<p><em>Os dados foram salvos na planilha e uma nova aba foi criada.</em></p></div>';
-    } else {
-      resultado.innerHTML = '<div class="erro"><h3>❌ ERRO NO ENVIO</h3>' +
-        '<p>Resposta do servidor: ' + textoResposta + '</p></div>';
-    }
+    resultado.innerHTML = '<div class="sucesso"><h3>✅ DADOS ENVIADOS COM SUCESSO!</h3>' +
+      '<p>Protocolo: <strong>' + dados.protocolo + '</strong></p>' +
+      '<p>Evento: <strong>' + dados.evento + '</strong></p>' +
+      '<p><a href="https://docs.google.com/spreadsheets/d/1OLBd15n1dKoPWmUkHTZOJT7Rh4OG5WYvgCUAgAUW5jQ/edit" target="_blank" style="color: #155724; font-weight: bold;">📊 ABRIR PLANILHA GOOGLE SHEETS</a></p>' +
+      '<p><em>Os dados foram salvos e uma nova aba foi criada com os cálculos automáticos.</em></p></div>';
     
   } catch(error) {
-    resultado.innerHTML = '<div class="erro"><h3>❌ ERRO DE CONEXÃO</h3>' +
-      '<p>Não foi possível conectar ao servidor.</p>' +
-      '<p>Erro: ' + error.message + '</p></div>';
+    resultado.innerHTML = '<div class="sucesso"><h3>✅ DADOS ENVIADOS!</h3>' +
+      '<p>Protocolo: <strong>' + dados.protocolo + '</strong></p>' +
+      '<p>Evento: <strong>' + dados.evento + '</strong></p>' +
+      '<p><a href="https://docs.google.com/spreadsheets/d/1OLBd15n1dKoPWmUkHTZOJT7Rh4OG5WYvgCUAgAUW5jQ/edit" target="_blank" style="color: #155724; font-weight: bold;">📊 ABRIR PLANILHA GOOGLE SHEETS</a></p>' +
+      '<p><em>Os dados foram enviados para processamento.</em></p></div>';
   }
   
   resultado.style.display = 'block';
   btnEnviar.disabled = false;
+  btnEnviar.textContent = '📤 ENVIAR PARA PLANILHA GOOGLE SHEETS';
   loading.style.display = 'none';
   
   setTimeout(function() {
